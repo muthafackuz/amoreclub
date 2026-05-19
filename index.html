@@ -472,7 +472,7 @@ onclick="openLoginModal()"
 💬 CLUB CHAT
 </div>
 
-<div class="chat-messages">
+<div class="chat-messages" id="chatMessages">
 
 <div class="message">
 <span class="message-user">System:</span>
@@ -622,7 +622,12 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
 getFirestore,
 doc,
-setDoc
+setDoc,
+collection,
+addDoc,
+query,
+orderBy,
+onSnapshot
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -911,6 +916,83 @@ if(e.key === "Enter"){
 document.querySelector(".send-btn").click();
 
 }
+
+});
+  /* CHAT SYSTEM */
+
+const chatMessages =
+document.getElementById("chatMessages");
+
+window.sendMessage = async () => {
+
+const input =
+document.getElementById("chatInput");
+
+const text = input.value.trim();
+
+if(text === ""){
+return;
+}
+
+if(!auth.currentUser){
+
+showMessage("Трябва да си влязъл");
+
+return;
+}
+
+await addDoc(collection(db,"chat"),{
+
+user: auth.currentUser.displayName,
+message: text,
+createdAt: Date.now()
+
+});
+
+input.value = "";
+
+};
+
+/* BUTTON */
+
+document
+.querySelector(".send-btn")
+.addEventListener("click",()=>{
+
+window.sendMessage();
+
+});
+
+/* REALTIME CHAT */
+
+const q = query(
+collection(db,"chat"),
+orderBy("createdAt")
+);
+
+onSnapshot(q,(snapshot)=>{
+
+chatMessages.innerHTML = "";
+
+snapshot.forEach((doc)=>{
+
+const data = doc.data();
+
+chatMessages.innerHTML += `
+
+<div class="message">
+<span class="message-user">
+${data.user}:
+</span>
+${data.message}
+</div>
+
+`;
+
+});
+
+chatMessages.scrollTop =
+chatMessages.scrollHeight;
 
 });
 </script>
