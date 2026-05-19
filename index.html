@@ -22,7 +22,7 @@ height:100vh;
 overflow:hidden;
 }
 
-/* TOP DJ BAR */
+/* TOP BAR */
 
 .top-bar{
 height:80px;
@@ -353,10 +353,28 @@ cursor:pointer;
 
 }
 
+/* CUSTOM MESSAGE */
+
+.custom-alert{
+position:fixed;
+top:20px;
+right:20px;
+background:#111827;
+border:1px solid #ff0077;
+padding:15px 20px;
+border-radius:12px;
+z-index:99999;
+font-weight:bold;
+display:none;
+box-shadow:0 0 20px rgba(255,0,119,0.3);
+}
+
 </style>
 </head>
 
 <body>
+
+<div id="customAlert" class="custom-alert"></div>
 
 <!-- TOP BAR -->
 
@@ -370,10 +388,21 @@ cursor:pointer;
 
 <div class="player-controls">
 
-<button class="player-btn">▶</button>
-<button class="player-btn">⏸</button>
-<button class="player-btn">🔉</button>
-<button class="player-btn">🔊</button>
+<button class="player-btn">
+▶
+</button>
+
+<button class="player-btn">
+⏸
+</button>
+
+<button class="player-btn">
+🔉
+</button>
+
+<button class="player-btn">
+🔊
+</button>
 
 </div>
 
@@ -395,7 +424,9 @@ cursor:pointer;
 🕺 DANCEFLOOR
 </div>
 
-<div class="dancefloor"></div>
+<div class="dancefloor">
+
+</div>
 
 </div>
 
@@ -417,14 +448,14 @@ cursor:pointer;
 
 <button
 class="auth-btn"
-onclick="window.openRegisterModal()"
+onclick="openRegisterModal()"
 >
 РЕГИСТРАЦИЯ
 </button>
 
 <button
 class="auth-btn"
-onclick="window.openLoginModal()"
+onclick="openLoginModal()"
 >
 ВХОД
 </button>
@@ -469,12 +500,113 @@ placeholder="Напиши съобщение..."
 
 </div>
 
+<!-- LOGIN MODAL -->
+
+<div id="loginModal" class="modal">
+
+<div class="modal-content">
+
+<h2>ВХОД</h2>
+
+<input
+type="email"
+id="loginEmail"
+placeholder="Email"
+class="modal-input"
+>
+
+<input
+type="password"
+id="loginPassword"
+placeholder="Password"
+class="modal-input"
+>
+
+<button
+class="modal-btn"
+onclick="window.login()"
+>
+ВЛЕЗ
+</button>
+
+<button
+class="close-btn"
+onclick="closeLoginModal()"
+>
+ЗАТВОРИ
+</button>
+
+</div>
+
+</div>
+
+<!-- REGISTER MODAL -->
+
+<div id="registerModal" class="modal">
+
+<div class="modal-content">
+
+<h2>РЕГИСТРАЦИЯ</h2>
+
+<input
+type="text"
+id="registerNickname"
+placeholder="Nickname"
+class="modal-input"
+>
+
+<input
+type="email"
+id="registerEmail"
+placeholder="Email"
+class="modal-input"
+>
+
+<input
+type="password"
+id="registerPassword"
+placeholder="Password"
+class="modal-input"
+>
+
+<select
+id="registerGender"
+class="modal-input"
+>
+<option value="male">Мъж</option>
+<option value="female">Жена</option>
+</select>
+
+<input
+type="number"
+id="registerBirthyear"
+placeholder="Година на раждане"
+class="modal-input"
+>
+
+<button
+class="modal-btn"
+onclick="window.register()"
+>
+РЕГИСТРАЦИЯ
+</button>
+
+<button
+class="close-btn"
+onclick="closeRegisterModal()"
+>
+ЗАТВОРИ
+</button>
+
+</div>
+
+</div>
+
 <!-- FIREBASE -->
 
 <script type="module">
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
 getAuth,
@@ -510,9 +642,28 @@ const auth = getAuth(app);
 
 const db = getFirestore(app);
 
+/* CUSTOM MESSAGE */
+
+window.showMessage = (text) => {
+
+const alertBox =
+document.getElementById("customAlert");
+
+alertBox.innerText = text;
+
+alertBox.style.display = "block";
+
+setTimeout(() => {
+
+alertBox.style.display = "none";
+
+},3000);
+
+};
+
 /* REGISTER */
 
-window.userRegister = async () => {
+window.register = async () => {
 
 const nickname =
 document.getElementById("registerNickname").value;
@@ -531,7 +682,8 @@ document.getElementById("registerBirthyear").value;
 
 if(!nickname || !email || !password){
 
-alert("Попълни всички полета");
+showMessage("Попълни всички полета");
+
 return;
 
 }
@@ -564,15 +716,13 @@ blockDanceInvites:false
 
 });
 
-window.closeRegisterModal();
+closeRegisterModal();
 
-alert("Регистрацията е успешна!");
-
-location.reload();
+showMessage("Регистрацията е успешна!");
 
 }catch(error){
 
-alert(error.message);
+showMessage(error.message);
 
 }
 
@@ -580,7 +730,7 @@ alert(error.message);
 
 /* LOGIN */
 
-window.userLogin = async () => {
+window.login = async () => {
 
 const email =
 document.getElementById("loginEmail").value;
@@ -590,7 +740,8 @@ document.getElementById("loginPassword").value;
 
 if(!email || !password){
 
-alert("Попълни всички полета");
+showMessage("Попълни всички полета");
+
 return;
 
 }
@@ -603,15 +754,13 @@ email,
 password
 );
 
-window.closeLoginModal();
+closeLoginModal();
 
-alert("Успешен вход!");
-
-location.reload();
+showMessage("Успешен вход!");
 
 }catch(error){
 
-alert(error.message);
+showMessage(error.message);
 
 }
 
@@ -619,11 +768,11 @@ alert(error.message);
 
 /* LOGOUT */
 
-window.userLogout = async () => {
+window.logout = async () => {
 
 await signOut(auth);
 
-location.reload();
+showMessage("Излезе от профила");
 
 };
 
@@ -644,7 +793,7 @@ ${user.displayName}
 
 <button
 class="auth-btn"
-onclick="window.userLogout()"
+onclick="window.logout()"
 >
 ИЗХОД
 </button>
@@ -710,108 +859,6 @@ document.getElementById(
 };
 
 </script>
-
-<!-- LOGIN MODAL -->
-
-<div id="loginModal" class="modal">
-
-<div class="modal-content">
-
-<h2>ВХОД</h2>
-
-<input
-type="email"
-id="loginEmail"
-placeholder="Email"
-class="modal-input"
->
-
-<input
-type="password"
-id="loginPassword"
-placeholder="Password"
-class="modal-input"
->
-
-<button
-class="modal-btn"
-onclick="window.userLogin()"
->
-ВЛЕЗ
-</button>
-
-<button
-class="close-btn"
-onclick="window.closeLoginModal()"
->
-ЗАТВОРИ
-</button>
-
-</div>
-
-</div>
-
-<!-- REGISTER MODAL -->
-
-<div id="registerModal" class="modal">
-
-<div class="modal-content">
-
-<h2>РЕГИСТРАЦИЯ</h2>
-
-<input
-type="text"
-id="registerNickname"
-placeholder="Nickname"
-class="modal-input"
->
-
-<input
-type="email"
-id="registerEmail"
-placeholder="Email"
-class="modal-input"
->
-
-<input
-type="password"
-id="registerPassword"
-placeholder="Password"
-class="modal-input"
->
-
-<select
-id="registerGender"
-class="modal-input"
->
-<option value="male">Мъж</option>
-<option value="female">Жена</option>
-</select>
-
-<input
-type="number"
-id="registerBirthyear"
-placeholder="Година на раждане"
-class="modal-input"
->
-
-<button
-class="modal-btn"
-onclick="window.userRegister()"
->
-РЕГИСТРАЦИЯ
-</button>
-
-<button
-class="close-btn"
-onclick="window.closeRegisterModal()"
->
-ЗАТВОРИ
-</button>
-
-</div>
-
-</div>
 
 </body>
 </html>
