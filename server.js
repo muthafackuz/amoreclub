@@ -44,6 +44,8 @@ const dancer = {
 
 id: socket.id,
 nickname: user.nickname,
+gender: user.gender,
+avatar: user.avatar,
 
 x: Math.floor(Math.random()*80),
 y: Math.floor(Math.random()*80)
