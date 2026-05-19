@@ -1022,15 +1022,21 @@ document.getElementById("danceBtn");
 
 if(!isDancing){
 
+const gender = "male";
+
+const avatar =
+gender === "female"
+? "https://i.imgur.com/8Km9tLL.png"
+: "https://i.imgur.com/6VBx3io.png";
+
 socket.emit("joinDancefloor",{
 
 nickname:
 auth.currentUser.displayName,
 
-gender:"male",
+gender:gender,
 
-avatar:
-"https://i.imgur.com/8Km9tLL.png"
+avatar:avatar
 
 });
 
