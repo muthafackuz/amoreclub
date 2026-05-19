@@ -372,6 +372,181 @@ placeholder="Напиши съобщение..."
 </div>
 
 </div>
+<!-- FIREBASE LOGIN SYSTEM -->
 
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getAuth,
+createUserWithEmailAndPassword,
+signInWithEmailAndPassword,
+updateProfile,
+onAuthStateChanged,
+signOut
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+setDoc,
+getDoc
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBh4ffnfT-rncjtILTJcJmcvD7Zrzu9tYA",
+  authDomain: "amoreclub-2c978.firebaseapp.com",
+  projectId: "amoreclub-2c978",
+  storageBucket: "amoreclub-2c978.firebasestorage.app",
+  messagingSenderId: "732025669965",
+  appId: "1:732025669965:web:ce3f70fe0b7ab75ca34f04"
+};
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const db = getFirestore(app);
+
+window.register = async function(){
+
+const nickname = prompt("Nickname:");
+const email = prompt("Email:");
+const password = prompt("Password:");
+const gender = prompt("Пол: male/female");
+const birthyear = prompt("Година на раждане:");
+
+if(!nickname || !email || !password){
+alert("Попълни всички полета");
+return;
+}
+
+try{
+
+const userCredential =
+await createUserWithEmailAndPassword(
+auth,
+email,
+password
+);
+
+const user = userCredential.user;
+
+await updateProfile(user,{
+displayName:nickname
+});
+
+await setDoc(doc(db,"users",user.uid),{
+
+nickname:nickname,
+email:email,
+gender:gender,
+birthyear:birthyear,
+createdAt:Date.now(),
+avatar:"",
+album:[],
+blockDanceInvites:false
+
+});
+
+alert("Регистрацията е успешна!");
+
+location.reload();
+
+}catch(error){
+
+alert(error.message);
+
+}
+
+}
+
+window.login = async function(){
+
+const email = prompt("Email:");
+const password = prompt("Password:");
+
+if(!email || !password){
+return;
+}
+
+try{
+
+await signInWithEmailAndPassword(
+auth,
+email,
+password
+);
+
+alert("Успешен вход!");
+
+location.reload();
+
+}catch(error){
+
+alert(error.message);
+
+}
+
+}
+
+window.logout = async function(){
+
+await signOut(auth);
+
+location.reload();
+
+}
+
+onAuthStateChanged(auth,(user)=>{
+
+const authBox =
+document.querySelector(".auth-buttons");
+
+if(user){
+
+authBox.innerHTML = `
+
+<button class="auth-btn">
+${user.displayName}
+</button>
+
+<button
+class="auth-btn"
+onclick="logout()"
+>
+ИЗХОД
+</button>
+
+`;
+
+}else{
+
+authBox.innerHTML = `
+
+<button
+class="auth-btn"
+onclick="register()"
+>
+РЕГИСТРАЦИЯ
+</button>
+
+<button
+class="auth-btn"
+onclick="login()"
+>
+ВХОД
+</button>
+
+`;
+
+}
+
+});
+
+</script>
 </body>
 </html>
