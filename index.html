@@ -249,7 +249,108 @@ border-radius:10px;
 cursor:pointer;
 font-weight:bold;
 }
+/* MODALS */
 
+.modal{
+
+display:none;
+
+position:fixed;
+
+top:0;
+left:0;
+
+width:100%;
+height:100%;
+
+background:rgba(0,0,0,0.8);
+
+justify-content:center;
+align-items:center;
+
+z-index:9999;
+
+}
+
+.modal-content{
+
+width:400px;
+
+background:#111827;
+
+border-radius:20px;
+
+padding:30px;
+
+display:flex;
+flex-direction:column;
+gap:15px;
+
+border:1px solid #333;
+
+box-shadow:
+0 0 30px rgba(255,0,119,0.3);
+
+}
+
+.modal-content h2{
+
+color:#ff0077;
+text-align:center;
+
+}
+
+.modal-input{
+
+background:#1f2937;
+
+border:none;
+
+padding:14px;
+
+border-radius:10px;
+
+color:white;
+
+font-size:16px;
+
+}
+
+.modal-btn{
+
+background:#ff0077;
+
+border:none;
+
+padding:14px;
+
+border-radius:10px;
+
+color:white;
+
+font-weight:bold;
+
+cursor:pointer;
+
+font-size:16px;
+
+}
+
+.close-btn{
+
+background:#222;
+
+border:none;
+
+padding:12px;
+
+border-radius:10px;
+
+color:white;
+
+cursor:pointer;
+
+}
 </style>
 </head>
 
@@ -419,11 +520,20 @@ const db = getFirestore(app);
 
 window.register = async function(){
 
-const nickname = prompt("Nickname:");
-const email = prompt("Email:");
-const password = prompt("Password:");
-const gender = prompt("Пол: male/female");
-const birthyear = prompt("Година на раждане:");
+const nickname =
+document.getElementById("registerNickname").value;
+
+const email =
+document.getElementById("registerEmail").value;
+
+const password =
+document.getElementById("registerPassword").value;
+
+const gender =
+document.getElementById("registerGender").value;
+
+const birthyear =
+document.getElementById("registerBirthyear").value;
 
 if(!nickname || !email || !password){
 alert("Попълни всички полета");
@@ -472,8 +582,11 @@ alert(error.message);
 
 window.login = async function(){
 
-const email = prompt("Email:");
-const password = prompt("Password:");
+const email =
+document.getElementById("loginEmail").value;
+
+const password =
+document.getElementById("loginPassword").value;
 
 if(!email || !password){
 return;
@@ -535,14 +648,14 @@ authBox.innerHTML = `
 
 <button
 class="auth-btn"
-onclick="register()"
+onclick="openRegisterModal()"
 >
 РЕГИСТРАЦИЯ
 </button>
 
 <button
 class="auth-btn"
-onclick="login()"
+onclick="openLoginModal()"
 >
 ВХОД
 </button>
@@ -552,7 +665,138 @@ onclick="login()"
 }
 
 });
+window.openLoginModal = function(){
 
+document.getElementById(
+"loginModal"
+).style.display = "flex";
+
+}
+
+window.closeLoginModal = function(){
+
+document.getElementById(
+"loginModal"
+).style.display = "none";
+
+}
+
+window.openRegisterModal = function(){
+
+document.getElementById(
+"registerModal"
+).style.display = "flex";
+
+}
+
+window.closeRegisterModal = function(){
+
+document.getElementById(
+"registerModal"
+).style.display = "none";
+
+}
 </script>
+  <!-- LOGIN MODAL -->
+
+<div id="loginModal" class="modal">
+
+<div class="modal-content">
+
+<h2>ВХОД</h2>
+
+<input
+type="email"
+id="loginEmail"
+placeholder="Email"
+class="modal-input"
+>
+
+<input
+type="password"
+id="loginPassword"
+placeholder="Password"
+class="modal-input"
+>
+
+<button
+class="modal-btn"
+onclick="login()"
+>
+ВЛЕЗ
+</button>
+
+<button
+class="close-btn"
+onclick="closeLoginModal()"
+>
+ЗАТВОРИ
+</button>
+
+</div>
+
+</div>
+
+<!-- REGISTER MODAL -->
+
+<div id="registerModal" class="modal">
+
+<div class="modal-content">
+
+<h2>РЕГИСТРАЦИЯ</h2>
+
+<input
+type="text"
+id="registerNickname"
+placeholder="Nickname"
+class="modal-input"
+>
+
+<input
+type="email"
+id="registerEmail"
+placeholder="Email"
+class="modal-input"
+>
+
+<input
+type="password"
+id="registerPassword"
+placeholder="Password"
+class="modal-input"
+>
+
+<select
+id="registerGender"
+class="modal-input"
+>
+<option value="male">Мъж</option>
+<option value="female">Жена</option>
+</select>
+
+<input
+type="number"
+id="registerBirthyear"
+placeholder="Година на раждане"
+class="modal-input"
+>
+
+<button
+class="modal-btn"
+onclick="register()"
+>
+РЕГИСТРАЦИЯ
+</button>
+
+<button
+class="close-btn"
+onclick="closeRegisterModal()"
+>
+ЗАТВОРИ
+</button>
+
+</div>
+
+</div>
 </body>
 </html>
