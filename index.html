@@ -249,6 +249,7 @@ border-radius:10px;
 cursor:pointer;
 font-weight:bold;
 }
+
 /* MODALS */
 
 .modal{
@@ -351,6 +352,7 @@ color:white;
 cursor:pointer;
 
 }
+
 </style>
 </head>
 
@@ -368,21 +370,10 @@ cursor:pointer;
 
 <div class="player-controls">
 
-<button class="player-btn">
-▶
-</button>
-
-<button class="player-btn">
-⏸
-</button>
-
-<button class="player-btn">
-🔉
-</button>
-
-<button class="player-btn">
-🔊
-</button>
+<button class="player-btn">▶</button>
+<button class="player-btn">⏸</button>
+<button class="player-btn">🔉</button>
+<button class="player-btn">🔊</button>
 
 </div>
 
@@ -404,9 +395,7 @@ cursor:pointer;
 🕺 DANCEFLOOR
 </div>
 
-<div class="dancefloor">
-
-</div>
+<div class="dancefloor"></div>
 
 </div>
 
@@ -428,14 +417,14 @@ cursor:pointer;
 
 <button
 class="auth-btn"
-onclick="openRegisterModal()"
+onclick="window.openRegisterModal()"
 >
 РЕГИСТРАЦИЯ
 </button>
 
 <button
 class="auth-btn"
-onclick="openLoginModal()"
+onclick="window.openLoginModal()"
 >
 ВХОД
 </button>
@@ -479,11 +468,13 @@ placeholder="Напиши съобщение..."
 </div>
 
 </div>
-<!-- FIREBASE LOGIN SYSTEM -->
+
+<!-- FIREBASE -->
 
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
 getAuth,
@@ -503,12 +494,14 @@ setDoc
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
+
 apiKey: "AIzaSyBh4ffnfT-rncjtILTJcJmcvD7Zrzu9tYA",
 authDomain: "amoreclub-2c978.firebaseapp.com",
 projectId: "amoreclub-2c978",
 storageBucket: "amoreclub-2c978.firebasestorage.app",
 messagingSenderId: "732025669965",
 appId: "1:732025669965:web:ce3f70fe0b7ab75ca34f04"
+
 };
 
 const app = initializeApp(firebaseConfig);
@@ -519,7 +512,7 @@ const db = getFirestore(app);
 
 /* REGISTER */
 
-window.register = async () => {
+window.userRegister = async () => {
 
 const nickname =
 document.getElementById("registerNickname").value;
@@ -539,7 +532,6 @@ document.getElementById("registerBirthyear").value;
 if(!nickname || !email || !password){
 
 alert("Попълни всички полета");
-
 return;
 
 }
@@ -572,7 +564,7 @@ blockDanceInvites:false
 
 });
 
-closeRegisterModal();
+window.closeRegisterModal();
 
 alert("Регистрацията е успешна!");
 
@@ -588,7 +580,7 @@ alert(error.message);
 
 /* LOGIN */
 
-window.login = async () => {
+window.userLogin = async () => {
 
 const email =
 document.getElementById("loginEmail").value;
@@ -599,7 +591,6 @@ document.getElementById("loginPassword").value;
 if(!email || !password){
 
 alert("Попълни всички полета");
-
 return;
 
 }
@@ -612,7 +603,7 @@ email,
 password
 );
 
-closeLoginModal();
+window.closeLoginModal();
 
 alert("Успешен вход!");
 
@@ -628,7 +619,7 @@ alert(error.message);
 
 /* LOGOUT */
 
-window.logout = async () => {
+window.userLogout = async () => {
 
 await signOut(auth);
 
@@ -653,7 +644,7 @@ ${user.displayName}
 
 <button
 class="auth-btn"
-onclick="window.logout()"
+onclick="window.userLogout()"
 >
 ИЗХОД
 </button>
@@ -719,7 +710,8 @@ document.getElementById(
 };
 
 </script>
-  <!-- LOGIN MODAL -->
+
+<!-- LOGIN MODAL -->
 
 <div id="loginModal" class="modal">
 
@@ -743,14 +735,14 @@ class="modal-input"
 
 <button
 class="modal-btn"
-onclick="window.login()"
+onclick="window.userLogin()"
 >
 ВЛЕЗ
 </button>
 
 <button
 class="close-btn"
-onclick="closeLoginModal()"
+onclick="window.closeLoginModal()"
 >
 ЗАТВОРИ
 </button>
@@ -805,14 +797,14 @@ class="modal-input"
 
 <button
 class="modal-btn"
-onclick="window.register()"
+onclick="window.userRegister()"
 >
 РЕГИСТРАЦИЯ
 </button>
 
 <button
 class="close-btn"
-onclick="closeRegisterModal()"
+onclick="window.closeRegisterModal()"
 >
 ЗАТВОРИ
 </button>
@@ -820,5 +812,6 @@ onclick="closeRegisterModal()"
 </div>
 
 </div>
+
 </body>
 </html>
