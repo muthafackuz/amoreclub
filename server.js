@@ -26,10 +26,18 @@ console.log("User connected");
 socket.on("joinDancefloor",(user)=>{
 
 const alreadyExists =
-dancers.find(d=>d.id === socket.id);
+dancers.find(
+d => d.nickname === user.nickname
+);
 
 if(alreadyExists){
+
+socket.emit(
+"alreadyDancing"
+);
+
 return;
+
 }
 
 const dancer = {
