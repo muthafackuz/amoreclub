@@ -498,18 +498,17 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
 getFirestore,
 doc,
-setDoc,
-getDoc
+setDoc
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBh4ffnfT-rncjtILTJcJmcvD7Zrzu9tYA",
-  authDomain: "amoreclub-2c978.firebaseapp.com",
-  projectId: "amoreclub-2c978",
-  storageBucket: "amoreclub-2c978.firebasestorage.app",
-  messagingSenderId: "732025669965",
-  appId: "1:732025669965:web:ce3f70fe0b7ab75ca34f04"
+apiKey: "AIzaSyBh4ffnfT-rncjtILTJcJmcvD7Zrzu9tYA",
+authDomain: "amoreclub-2c978.firebaseapp.com",
+projectId: "amoreclub-2c978",
+storageBucket: "amoreclub-2c978.firebasestorage.app",
+messagingSenderId: "732025669965",
+appId: "1:732025669965:web:ce3f70fe0b7ab75ca34f04"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -518,7 +517,9 @@ const auth = getAuth(app);
 
 const db = getFirestore(app);
 
-window.register = async function(){
+/* REGISTER */
+
+window.register = async () => {
 
 const nickname =
 document.getElementById("registerNickname").value;
@@ -536,8 +537,11 @@ const birthyear =
 document.getElementById("registerBirthyear").value;
 
 if(!nickname || !email || !password){
+
 alert("Попълни всички полета");
+
 return;
+
 }
 
 try{
@@ -557,10 +561,10 @@ displayName:nickname
 
 await setDoc(doc(db,"users",user.uid),{
 
-nickname:nickname,
-email:email,
-gender:gender,
-birthyear:birthyear,
+nickname,
+email,
+gender,
+birthyear,
 createdAt:Date.now(),
 avatar:"",
 album:[],
@@ -568,9 +572,9 @@ blockDanceInvites:false
 
 });
 
-alert("Регистрацията е успешна!");
-
 closeRegisterModal();
+
+alert("Регистрацията е успешна!");
 
 location.reload();
 
@@ -580,9 +584,11 @@ alert(error.message);
 
 }
 
-}
+};
 
-window.login = async function(){
+/* LOGIN */
+
+window.login = async () => {
 
 const email =
 document.getElementById("loginEmail").value;
@@ -591,7 +597,11 @@ const password =
 document.getElementById("loginPassword").value;
 
 if(!email || !password){
+
+alert("Попълни всички полета");
+
 return;
+
 }
 
 try{
@@ -602,9 +612,9 @@ email,
 password
 );
 
-alert("Успешен вход!");
-
 closeLoginModal();
+
+alert("Успешен вход!");
 
 location.reload();
 
@@ -614,20 +624,24 @@ alert(error.message);
 
 }
 
-}
+};
 
-window.logout = async function(){
+/* LOGOUT */
+
+window.logout = async () => {
 
 await signOut(auth);
 
 location.reload();
 
-}
+};
+
+/* AUTH STATE */
 
 onAuthStateChanged(auth,(user)=>{
 
 const authBox =
-document.querySelector(".auth-buttons");
+document.getElementById("authButtons");
 
 if(user){
 
@@ -669,37 +683,41 @@ onclick="window.openLoginModal()"
 }
 
 });
-window.openLoginModal = function(){
+
+/* MODALS */
+
+window.openLoginModal = () => {
 
 document.getElementById(
 "loginModal"
 ).style.display = "flex";
 
-}
+};
 
-window.closeLoginModal = function(){
+window.closeLoginModal = () => {
 
 document.getElementById(
 "loginModal"
 ).style.display = "none";
 
-}
+};
 
-window.openRegisterModal = function(){
+window.openRegisterModal = () => {
 
 document.getElementById(
 "registerModal"
 ).style.display = "flex";
 
-}
+};
 
-window.closeRegisterModal = function(){
+window.closeRegisterModal = () => {
 
 document.getElementById(
 "registerModal"
 ).style.display = "none";
 
-}
+};
+
 </script>
   <!-- LOGIN MODAL -->
 
