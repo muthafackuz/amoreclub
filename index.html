@@ -1025,7 +1025,12 @@ if(!isDancing){
 socket.emit("joinDancefloor",{
 
 nickname:
-auth.currentUser.displayName
+auth.currentUser.displayName,
+
+gender:"male",
+
+avatar:
+"https://i.imgur.com/8Km9tLL.png"
 
 });
 
@@ -1072,6 +1077,11 @@ dancefloor.innerHTML = "";
 
 dancers.forEach((dancer)=>{
 
+const borderColor =
+dancer.gender === "female"
+? "#ff0077"
+: "#00e5ff";
+
 dancefloor.innerHTML += `
 
 <div style="
@@ -1079,18 +1089,44 @@ position:absolute;
 left:${dancer.x}%;
 top:${dancer.y}%;
 
-background:#ff0077;
-padding:10px;
-border-radius:12px;
-
-font-size:14px;
-font-weight:bold;
-
-box-shadow:
-0 0 15px rgba(255,0,119,0.5);
+display:flex;
+flex-direction:column;
+align-items:center;
 
 ">
-🕺 ${dancer.nickname}
+
+<img
+src="${dancer.avatar}"
+style="
+width:70px;
+height:70px;
+
+border-radius:50%;
+
+border:3px solid ${borderColor};
+
+object-fit:cover;
+
+box-shadow:
+0 0 20px ${borderColor};
+
+background:#111;
+"
+>
+
+<div style="
+margin-top:8px;
+font-size:14px;
+font-weight:bold;
+color:white;
+
+text-shadow:
+0 0 10px ${borderColor};
+
+">
+${dancer.nickname}
+</div>
+
 </div>
 
 `;
