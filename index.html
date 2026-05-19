@@ -423,8 +423,15 @@ box-shadow:0 0 20px rgba(255,0,119,0.3);
 <div class="box-title">
 🕺 DANCEFLOOR
 </div>
-
-<div class="dancefloor">
+<button
+class="auth-btn"
+id="danceBtn"
+style="margin-bottom:15px;"
+onclick="toggleDance()"
+>
+🕺 СКОЧИ НА ДАНСИНГА
+</button>
+<div class="dancefloor" id="dancefloor">
 
 </div>
 
@@ -647,7 +654,10 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 const db = getFirestore(app);
+const socket =
+io("https://amoreclub-server.onrender.com");
 
+let isDancing = false;
 /* CUSTOM MESSAGE */
 
 window.showMessage = (text) => {
@@ -995,7 +1005,86 @@ chatMessages.scrollTop =
 chatMessages.scrollHeight;
 
 });
-</script>
+  /* DANCEFLOOR */
 
+window.toggleDance = () => {
+
+if(!auth.currentUser){
+
+showMessage("Трябва да си влязъл");
+
+return;
+
+}
+
+const btn =
+document.getElementById("danceBtn");
+
+if(!isDancing){
+
+socket.emit("joinDancefloor",{
+
+nickname:
+auth.currentUser.displayName
+
+});
+
+btn.innerText =
+"🛑 СПРИ ДА ТАНЦУВАШ";
+
+isDancing = true;
+
+}else{
+
+socket.emit("leaveDancefloor");
+
+btn.innerText =
+"🕺 СКОЧИ НА ДАНСИНГА";
+
+isDancing = false;
+
+}
+
+};
+
+/* RECEIVE DANCERS */
+
+socket.on("dancefloorUpdate",(dancers)=>{
+
+const dancefloor =
+document.getElementById("dancefloor");
+
+dancefloor.innerHTML = "";
+
+dancers.forEach((dancer)=>{
+
+dancefloor.innerHTML += `
+
+<div style="
+position:absolute;
+left:${dancer.x}%;
+top:${dancer.y}%;
+
+background:#ff0077;
+padding:10px;
+border-radius:12px;
+
+font-size:14px;
+font-weight:bold;
+
+box-shadow:
+0 0 15px rgba(255,0,119,0.5);
+
+">
+🕺 ${dancer.nickname}
+</div>
+
+`;
+
+});
+
+});
+</script>
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 </body>
 </html>
