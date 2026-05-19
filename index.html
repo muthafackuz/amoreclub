@@ -1048,7 +1048,21 @@ isDancing = false;
 };
 
 /* RECEIVE DANCERS */
+socket.on("alreadyDancing",()=>{
 
+isDancing = true;
+
+const btn =
+document.getElementById("danceBtn");
+
+btn.innerText =
+"🛑 СПРИ ДА ТАНЦУВАШ";
+
+showMessage(
+"Вече си на дансинга"
+);
+
+});
 socket.on("dancefloorUpdate",(dancers)=>{
 
 const dancefloor =
