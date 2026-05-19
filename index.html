@@ -485,6 +485,7 @@ onclick="openLoginModal()"
 
 <input
 class="chat-input"
+id="chatInput"
 placeholder="Напиши съобщение..."
 >
 
@@ -897,6 +898,19 @@ window.register();
 }
 
 });
+
+});
+  /* CHAT ENTER */
+
+document
+.getElementById("chatInput")
+.addEventListener("keydown",(e)=>{
+
+if(e.key === "Enter"){
+
+document.querySelector(".send-btn").click();
+
+}
 
 });
 </script>
