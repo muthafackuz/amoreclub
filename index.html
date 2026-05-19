@@ -857,7 +857,48 @@ document.getElementById(
 ).style.display = "none";
 
 };
+/* ENTER BUTTON SUPPORT */
 
+/* LOGIN */
+
+document
+.getElementById("loginPassword")
+.addEventListener("keydown",(e)=>{
+
+if(e.key === "Enter"){
+
+window.login();
+
+}
+
+});
+
+/* REGISTER */
+
+const registerInputs = [
+
+"registerNickname",
+"registerEmail",
+"registerPassword",
+"registerBirthyear"
+
+];
+
+registerInputs.forEach((id)=>{
+
+document
+.getElementById(id)
+.addEventListener("keydown",(e)=>{
+
+if(e.key === "Enter"){
+
+window.register();
+
+}
+
+});
+
+});
 </script>
 
 </body>
