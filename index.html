@@ -630,6 +630,7 @@ import {
 getFirestore,
 doc,
 setDoc,
+getDoc,
 collection,
 addDoc,
 query,
@@ -1007,7 +1008,7 @@ chatMessages.scrollHeight;
 });
   /* DANCEFLOOR */
 
-window.toggleDance = () => {
+window.toggleDance = async () => {
 
 if(!auth.currentUser){
 
@@ -1022,23 +1023,7 @@ document.getElementById("danceBtn");
 
 if(!isDancing){
 
-const gender = "male";
-
-const avatar =
-gender === "female"
-? "https://i.imgur.com/8Km9tLL.png"
-: "https://i.imgur.com/6VBx3io.png";
-
-socket.emit("joinDancefloor",{
-
-nickname:
-auth.currentUser.displayName,
-
-gender:gender,
-
-avatar:avatar
-
-});
+await joinDancefloor();
 
 btn.innerText =
 "🛑 СПРИ ДА ТАНЦУВАШ";
@@ -1057,7 +1042,6 @@ isDancing = false;
 }
 
 };
-
 /* RECEIVE DANCERS */
 socket.on("alreadyDancing",()=>{
 
@@ -1140,6 +1124,48 @@ ${dancer.nickname}
 });
 
 });
+  window.joinDancefloor = async () => {
+
+if(!auth.currentUser){
+return;
+}
+
+const userRef = doc(
+db,
+"users",
+auth.currentUser.uid
+);
+
+const userSnap =
+await getDoc(userRef);
+
+if(!userSnap.exists()){
+return;
+}
+
+const userData =
+userSnap.data();
+
+const gender =
+userData.gender || "male";
+
+const avatar =
+gender === "female"
+? "https://i.imgur.com/8Km9tLL.png"
+: "https://i.imgur.com/6VBx3io.png";
+
+socket.emit("joinDancefloor",{
+
+nickname:
+auth.currentUser.displayName,
+
+gender:gender,
+
+avatar:avatar
+
+});
+
+};
 </script>
 <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 </body>
