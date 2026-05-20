@@ -1028,15 +1028,46 @@ const data = doc.data();
 
 chatMessages.innerHTML += `
 
-<div class="message">
-<span class="message-user">
-${data.user}:
-</span>
+<div style="
+display:flex;
+gap:10px;
+align-items:flex-start;
+margin-bottom:12px;
+">
+
+<img
+src="${data.avatar || 'https://i.imgur.com/6VBx3io.png'}"
+style="
+width:42px;
+height:42px;
+border-radius:50%;
+object-fit:cover;
+border:2px solid #ff0077;
+"
+>
+
+<div>
+
+<div style="
+color:#00e5ff;
+font-weight:bold;
+margin-bottom:4px;
+">
+${data.user}
+</div>
+
+<div style="
+color:white;
+word-break:break-word;
+">
 ${data.message}
 </div>
 
-`;
+</div>
 
+</div>
+
+`;
 });
 
 chatMessages.scrollTop =
