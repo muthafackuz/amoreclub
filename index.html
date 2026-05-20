@@ -1168,6 +1168,35 @@ let ytPlayer;
 
 /* YOUTUBE PLAYER */
 
+let ytPlayer;
+let currentVideoId = "";
+let musicStartedAt = 0;
+
+/* RECEIVE MUSIC FROM SERVER */
+
+socket.on("currentMusic",(data)=>{
+
+currentVideoId = data.videoId;
+musicStartedAt = data.startedAt;
+
+if(ytPlayer){
+
+const seconds =
+Math.floor(
+(Date.now() - musicStartedAt) / 1000
+);
+
+ytPlayer.loadVideoById({
+videoId: currentVideoId,
+startSeconds: seconds
+});
+
+}
+
+});
+
+/* YOUTUBE PLAYER */
+
 window.onYouTubeIframeAPIReady = () => {
 
 ytPlayer = new YT.Player('youtubePlayer', {
@@ -1175,19 +1204,31 @@ ytPlayer = new YT.Player('youtubePlayer', {
 height:'60',
 width:'700',
 
-videoId:'kJQP7kiw5Fk',
+videoId:'',
 
 playerVars:{
 autoplay:1,
-controls:0,
-mute:1,
-rel:0
+controls:0
 },
 
 events:{
 onReady:(event)=>{
 
-event.target.playVideo();
+event.target.setVolume(50);
+
+if(currentVideoId){
+
+const seconds =
+Math.floor(
+(Date.now() - musicStartedAt) / 1000
+);
+
+event.target.loadVideoById({
+videoId: currentVideoId,
+startSeconds: seconds
+});
+
+}
 
 }
 }
