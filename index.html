@@ -1172,21 +1172,21 @@ window.onYouTubeIframeAPIReady = () => {
 
 ytPlayer = new YT.Player('youtubePlayer', {
 
-height:'70',
+height:'60',
 width:'700',
 
 videoId:'kJQP7kiw5Fk',
 
 playerVars:{
 autoplay:1,
-controls:1,
+controls:0,
+mute:1,
 rel:0
 },
 
 events:{
 onReady:(event)=>{
 
-event.target.setVolume(50);
 event.target.playVideo();
 
 }
@@ -1201,7 +1201,10 @@ event.target.playVideo();
 function playMusic(){
 
 if(ytPlayer){
+
+ytPlayer.unMute();
 ytPlayer.playVideo();
+
 }
 
 }
@@ -1209,7 +1212,9 @@ ytPlayer.playVideo();
 function pauseMusic(){
 
 if(ytPlayer){
+
 ytPlayer.pauseVideo();
+
 }
 
 }
@@ -1218,11 +1223,15 @@ function volumeUp(){
 
 if(ytPlayer){
 
+ytPlayer.unMute();
+
 let current =
 ytPlayer.getVolume();
 
 if(current < 100){
+
 ytPlayer.setVolume(current + 10);
+
 }
 
 }
@@ -1233,11 +1242,15 @@ function volumeDown(){
 
 if(ytPlayer){
 
+ytPlayer.unMute();
+
 let current =
 ytPlayer.getVolume();
 
 if(current > 0){
+
 ytPlayer.setVolume(current - 10);
+
 }
 
 }
