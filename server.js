@@ -15,11 +15,31 @@ origin:"*"
 }
 });
 
+/* DANCEFLOOR */
+
 let dancers = [];
+
+/* MUSIC SYSTEM */
+
+let currentVideo = "qKjJeQCpbZk";
+
+let videoStartedAt = Date.now();
+
+/* SOCKET CONNECTION */
 
 io.on("connection",(socket)=>{
 
 console.log("User connected");
+
+/* SEND CURRENT MUSIC */
+
+socket.emit("currentMusic",{
+
+videoId:currentVideo,
+
+startedAt:videoStartedAt
+
+});
 
 /* JOIN DANCEFLOOR */
 
@@ -81,6 +101,8 @@ io.emit("dancefloorUpdate",dancers);
 });
 
 });
+
+/* START SERVER */
 
 server.listen(3000,()=>{
 
