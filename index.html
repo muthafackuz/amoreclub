@@ -989,10 +989,27 @@ showMessage("Трябва да си влязъл");
 return;
 }
 
+const userRef = doc(
+db,
+"users",
+auth.currentUser.uid
+);
+
+const userSnap =
+await getDoc(userRef);
+
+const userData =
+userSnap.data();
+
 await addDoc(collection(db,"chat"),{
 
 user: auth.currentUser.displayName,
+
 message: text,
+
+avatar:
+userData.avatar || "",
+
 createdAt: Date.now()
 
 });
