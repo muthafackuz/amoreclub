@@ -1174,7 +1174,7 @@ let musicStartedAt = 0;
 
 /* RECEIVE MUSIC FROM SERVER */
 
-socket.on("currentMusic",(data)=>{
+socket.on("musicSync",(data)=>{
 
 currentVideoId = data.videoId;
 musicStartedAt = data.startedAt;
