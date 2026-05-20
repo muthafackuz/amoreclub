@@ -1233,22 +1233,13 @@ avatar:avatar
 
 };
   /* YOUTUBE PLAYER */
+<!-- YOUTUBE PLAYER -->
 
-let player;
-
-let currentVideo = "qKjJeQCpbZk";
-
-let videoStartedAt =
-Date.now();
-
-/* YOUTUBE READY */
-
-/* YOUTUBE PLAYER */
+<script>
 
 let player;
 
 let currentVideo = "";
-
 let videoStartedAt = 0;
 
 /* RECEIVE CURRENT MUSIC */
@@ -1256,7 +1247,6 @@ let videoStartedAt = 0;
 socket.on("currentMusic",(data)=>{
 
 currentVideo = data.videoId;
-
 videoStartedAt = data.startedAt;
 
 if(player){
@@ -1279,9 +1269,7 @@ player.playVideo();
 
 window.onYouTubeIframeAPIReady = () => {
 
-player = new YT.Player(
-'youtubePlayer',
-{
+player = new YT.Player('youtubePlayer',{
 
 height:'60',
 width:'700',
@@ -1306,9 +1294,7 @@ function onPlayerReady(event){
 
 if(currentVideo !== ""){
 
-event.target.loadVideoById(
-currentVideo
-);
+event.target.loadVideoById(currentVideo);
 
 const currentTime = Math.floor(
 (Date.now() - videoStartedAt) / 1000
