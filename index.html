@@ -1186,6 +1186,36 @@ avatar:avatar
 });
 
 };
+  /* YOUTUBE PLAYER */
+
+let ytPlayer;
+
+window.onYouTubeIframeAPIReady = () => {
+
+ytPlayer = new YT.Player('youtubePlayer', {
+
+height:'60',
+width:'700',
+
+videoId:'jfKfPfyJRdk',
+
+playerVars:{
+autoplay:1,
+controls:0,
+disablekb:1
+},
+
+events:{
+onReady:(event)=>{
+
+event.target.playVideo();
+
+}
+}
+
+});
+
+};
 </script>
 <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 </body>
