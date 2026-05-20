@@ -1174,10 +1174,20 @@ let musicStartedAt = 0;
 
 /* RECEIVE MUSIC FROM SERVER */
 
+let ytPlayer;
+
+let currentVideoId = "";
+let musicStartedAt = 0;
+
+/* RECEIVE MUSIC SYNC */
+
 socket.on("musicSync",(data)=>{
 
 currentVideoId = data.videoId;
+
 musicStartedAt = data.startedAt;
+
+/* IF PLAYER READY */
 
 if(ytPlayer){
 
@@ -1190,6 +1200,8 @@ ytPlayer.loadVideoById({
 videoId: currentVideoId,
 startSeconds: seconds
 });
+
+ytPlayer.playVideo();
 
 }
 
@@ -1208,13 +1220,14 @@ videoId:'',
 
 playerVars:{
 autoplay:1,
-controls:0
+controls:0,
+mute:1,
+rel:0
 },
 
 events:{
-onReady:(event)=>{
 
-event.target.setVolume(50);
+onReady:(event)=>{
 
 if(currentVideoId){
 
@@ -1228,9 +1241,18 @@ videoId: currentVideoId,
 startSeconds: seconds
 });
 
-}
+event.target.playVideo();
 
 }
+
+document.body.addEventListener("click",()=>{
+
+event.target.unMute();
+
+},{ once:true });
+
+}
+
 }
 
 });
