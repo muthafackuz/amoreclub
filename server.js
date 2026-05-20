@@ -33,11 +33,11 @@ console.log("User connected");
 
 /* SEND CURRENT MUSIC */
 
-socket.emit("currentMusic",{
+socket.emit("musicSync",{
 
-videoId:currentVideo,
+videoId: currentVideo,
 
-startedAt:videoStartedAt
+startedAt: videoStartedAt
 
 });
 
@@ -63,11 +63,15 @@ return;
 const dancer = {
 
 id: socket.id,
+
 nickname: user.nickname,
+
 gender: user.gender,
+
 avatar: user.avatar,
 
 x: Math.floor(Math.random()*80),
+
 y: Math.floor(Math.random()*80)
 
 };
@@ -83,9 +87,14 @@ io.emit("dancefloorUpdate",dancers);
 socket.on("leaveDancefloor",()=>{
 
 dancers =
-dancers.filter(d=>d.id !== socket.id);
+dancers.filter(
+d => d.id !== socket.id
+);
 
-io.emit("dancefloorUpdate",dancers);
+io.emit(
+"dancefloorUpdate",
+dancers
+);
 
 });
 
@@ -94,9 +103,14 @@ io.emit("dancefloorUpdate",dancers);
 socket.on("disconnect",()=>{
 
 dancers =
-dancers.filter(d=>d.id !== socket.id);
+dancers.filter(
+d => d.id !== socket.id
+);
 
-io.emit("dancefloorUpdate",dancers);
+io.emit(
+"dancefloorUpdate",
+dancers
+);
 
 });
 
