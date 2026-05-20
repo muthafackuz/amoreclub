@@ -37,22 +37,20 @@ position:relative;
 }
 
 .dj-player{
-width:500px;
-height:50px;
+
+width:700px;
+height:60px;
 
 background:#18181f;
 
 border:1px solid #333;
 border-radius:12px;
 
-display:flex;
-align-items:center;
-justify-content:space-between;
-
-padding:0 15px;
+overflow:hidden;
 
 box-shadow:
 0 0 15px rgba(255,0,119,0.2);
+
 }
 
 .player-title{
@@ -381,6 +379,10 @@ box-shadow:0 0 20px rgba(255,0,119,0.3);
 <div class="top-bar">
 
 <div class="dj-player">
+
+<div id="youtubePlayer"></div>
+  
+</div>
 
 <div class="player-title">
 🎵 AMORECLUB DJ
@@ -1255,7 +1257,55 @@ avatar:avatar
 });
 
 };
+  /* YOUTUBE PLAYER */
+
+let player;
+
+let currentVideo = "qKjJeQCpbZk";
+
+let videoStartedAt =
+Date.now();
+
+/* YOUTUBE READY */
+
+window.onYouTubeIframeAPIReady = () => {
+
+player = new YT.Player(
+'youtubePlayer',
+{
+
+height:'60',
+width:'700',
+
+videoId:currentVideo,
+
+playerVars:{
+autoplay:1,
+controls:0,
+disablekb:1
+},
+
+events:{
+onReady:onPlayerReady
+}
+
+});
+
+};
+
+function onPlayerReady(event){
+
+const currentTime = Math.floor(
+(Date.now() - videoStartedAt) / 1000
+);
+
+event.target.seekTo(currentTime);
+
+event.target.playVideo();
+
+}
 </script>
 <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <script src="https://www.youtube.com/iframe_api"></script>
 </body>
 </html>
