@@ -1332,40 +1332,5 @@ event.target.playVideo();
 
 }
 </script>
-  <script src="https://www.youtube.com/iframe_api"></script>
-
-<script>
-
-let player;
-
-window.onYouTubeIframeAPIReady = function(){
-
-player = new YT.Player('youtubePlayer', {
-
-height: '50',
-width: '500',
-
-videoId: 'jfKfPfyJRdk',
-
-playerVars: {
-'autoplay': 1,
-'controls': 0,
-'loop': 1,
-'playlist': 'jfKfPfyJRdk'
-},
-
-events: {
-'onReady': (event) => {
-
-event.target.playVideo();
-
-}
-}
-
-});
-
-};
-
-</script>
 </body>
 </html>
