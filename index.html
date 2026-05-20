@@ -1269,6 +1269,40 @@ Date.now();
 
 /* YOUTUBE READY */
 
+/* YOUTUBE PLAYER */
+
+let player;
+
+let currentVideo = "";
+
+let videoStartedAt = 0;
+
+/* RECEIVE CURRENT MUSIC */
+
+socket.on("currentMusic",(data)=>{
+
+currentVideo = data.videoId;
+
+videoStartedAt = data.startedAt;
+
+if(player){
+
+player.loadVideoById(currentVideo);
+
+const currentTime = Math.floor(
+(Date.now() - videoStartedAt) / 1000
+);
+
+player.seekTo(currentTime);
+
+player.playVideo();
+
+}
+
+});
+
+/* YOUTUBE READY */
+
 window.onYouTubeIframeAPIReady = () => {
 
 player = new YT.Player(
@@ -1278,7 +1312,7 @@ player = new YT.Player(
 height:'60',
 width:'700',
 
-videoId:currentVideo,
+videoId:'',
 
 playerVars:{
 autoplay:1,
@@ -1295,6 +1329,24 @@ onReady:onPlayerReady
 };
 
 function onPlayerReady(event){
+
+if(currentVideo !== ""){
+
+event.target.loadVideoById(
+currentVideo
+);
+
+const currentTime = Math.floor(
+(Date.now() - videoStartedAt) / 1000
+);
+
+event.target.seekTo(currentTime);
+
+event.target.playVideo();
+
+}
+
+}
 
 const currentTime = Math.floor(
 (Date.now() - videoStartedAt) / 1000
