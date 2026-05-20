@@ -667,7 +667,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-const socket =
+window.socket =
 io("https://amoreclub-server.onrender.com");
 
 let isDancing = false;
@@ -1164,44 +1164,31 @@ avatar:avatar
 
 <script>
 
-let ytPlayer;
+window.ytPlayer = null;
 
-/* YOUTUBE PLAYER */
-
-let ytPlayer;
-let currentVideoId = "";
-let musicStartedAt = 0;
+window.currentVideoId = "";
+window.musicStartedAt = 0;
 
 /* RECEIVE MUSIC FROM SERVER */
 
-let ytPlayer;
+window.socket.on("currentMusic",(data)=>{
 
-let currentVideoId = "";
-let musicStartedAt = 0;
+window.currentVideoId = data.videoId;
 
-/* RECEIVE MUSIC SYNC */
+window.musicStartedAt = data.startedAt;
 
-socket.on("musicSync",(data)=>{
+if(window.ytPlayer){
 
-currentVideoId = data.videoId;
-
-musicStartedAt = data.startedAt;
-
-/* IF PLAYER READY */
-
-if(ytPlayer){
-
-const seconds =
-Math.floor(
-(Date.now() - musicStartedAt) / 1000
+const seconds = Math.floor(
+(Date.now() - window.musicStartedAt) / 1000
 );
 
-ytPlayer.loadVideoById({
-videoId: currentVideoId,
+window.ytPlayer.loadVideoById({
+videoId: window.currentVideoId,
 startSeconds: seconds
 });
 
-ytPlayer.playVideo();
+window.ytPlayer.playVideo();
 
 }
 
@@ -1211,9 +1198,9 @@ ytPlayer.playVideo();
 
 window.onYouTubeIframeAPIReady = () => {
 
-ytPlayer = new YT.Player('youtubePlayer', {
+window.ytPlayer = new YT.Player('youtubePlayer',{
 
-height:'60',
+height:'70',
 width:'700',
 
 videoId:'',
@@ -1229,15 +1216,14 @@ events:{
 
 onReady:(event)=>{
 
-if(currentVideoId){
+if(window.currentVideoId){
 
-const seconds =
-Math.floor(
-(Date.now() - musicStartedAt) / 1000
+const seconds = Math.floor(
+(Date.now() - window.musicStartedAt) / 1000
 );
 
 event.target.loadVideoById({
-videoId: currentVideoId,
+videoId: window.currentVideoId,
 startSeconds: seconds
 });
 
@@ -1245,11 +1231,15 @@ event.target.playVideo();
 
 }
 
+/* UNMUTE AFTER CLICK */
+
 document.body.addEventListener("click",()=>{
 
 event.target.unMute();
 
-},{ once:true });
+},{
+once:true
+});
 
 }
 
@@ -1263,10 +1253,11 @@ event.target.unMute();
 
 function playMusic(){
 
-if(ytPlayer){
+if(window.ytPlayer){
 
-ytPlayer.unMute();
-ytPlayer.playVideo();
+window.ytPlayer.unMute();
+
+window.ytPlayer.playVideo();
 
 }
 
@@ -1274,9 +1265,9 @@ ytPlayer.playVideo();
 
 function pauseMusic(){
 
-if(ytPlayer){
+if(window.ytPlayer){
 
-ytPlayer.pauseVideo();
+window.ytPlayer.pauseVideo();
 
 }
 
@@ -1284,16 +1275,16 @@ ytPlayer.pauseVideo();
 
 function volumeUp(){
 
-if(ytPlayer){
+if(window.ytPlayer){
 
-ytPlayer.unMute();
+window.ytPlayer.unMute();
 
 let current =
-ytPlayer.getVolume();
+window.ytPlayer.getVolume();
 
 if(current < 100){
 
-ytPlayer.setVolume(current + 10);
+window.ytPlayer.setVolume(current + 10);
 
 }
 
@@ -1303,16 +1294,16 @@ ytPlayer.setVolume(current + 10);
 
 function volumeDown(){
 
-if(ytPlayer){
+if(window.ytPlayer){
 
-ytPlayer.unMute();
+window.ytPlayer.unMute();
 
 let current =
-ytPlayer.getVolume();
+window.ytPlayer.getVolume();
 
 if(current > 0){
 
-ytPlayer.setVolume(current - 10);
+window.ytPlayer.setVolume(current - 10);
 
 }
 
@@ -1321,6 +1312,5 @@ ytPlayer.setVolume(current - 10);
 }
 
 </script>
-
 </body>
 </html>
