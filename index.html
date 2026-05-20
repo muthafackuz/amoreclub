@@ -754,7 +754,7 @@ const data =
 await response.json();
 
 avatarUrl =
-data.data.url;
+data.data.display_url;
 
 }
 await setDoc(doc(db,"users",user.uid),{
