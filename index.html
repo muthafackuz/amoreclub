@@ -1187,9 +1187,13 @@ const gender =
 userData.gender || "male";
 
 const avatar =
+userData.avatar && userData.avatar !== ""
+? userData.avatar
+: (
 gender === "female"
 ? "https://i.imgur.com/8Km9tLL.png"
-: "https://i.imgur.com/6VBx3io.png";
+: "https://i.imgur.com/6VBx3io.png"
+);
 
 socket.emit("joinDancefloor",{
 
