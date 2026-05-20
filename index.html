@@ -26,7 +26,7 @@ overflow:hidden;
 /* TOP BAR */
 
 .top-bar{
-height:80px;
+height:90px;
 background:#111827;
 border-bottom:2px solid #ff0077;
 
@@ -42,7 +42,7 @@ padding:0 20px;
 .dj-player{
 
 width:700px;
-height:60px;
+height:70px;
 
 background:#18181f;
 
@@ -62,7 +62,7 @@ box-shadow:
 
 #youtubePlayer{
 width:700px;
-height:60px;
+height:70px;
 }
 
 .player-controls{
@@ -89,7 +89,7 @@ background:#ff0077;
 
 .main{
 display:flex;
-height:calc(100vh - 80px);
+height:calc(100vh - 90px);
 }
 
 /* LEFT */
@@ -622,8 +622,6 @@ onclick="closeRegisterModal()"
 <script src="https://www.youtube.com/iframe_api"></script>
 <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 
-<!-- FIREBASE -->
-
 <script type="module">
 
 const IMGBB_API_KEY =
@@ -666,9 +664,7 @@ appId: "1:732025669965:web:ce3f70fe0b7ab75ca34f04"
 };
 
 const app = initializeApp(firebaseConfig);
-
 const auth = getAuth(app);
-
 const db = getFirestore(app);
 
 const socket =
@@ -966,6 +962,16 @@ window.sendMessage();
 
 });
 
+document
+.getElementById("chatInput")
+.addEventListener("keydown",(e)=>{
+
+if(e.key === "Enter"){
+window.sendMessage();
+}
+
+});
+
 const q = query(
 collection(db,"chat"),
 orderBy("createdAt")
@@ -1166,14 +1172,15 @@ window.onYouTubeIframeAPIReady = () => {
 
 ytPlayer = new YT.Player('youtubePlayer', {
 
-height:'60',
+height:'70',
 width:'700',
 
 videoId:'kJQP7kiw5Fk',
 
 playerVars:{
 autoplay:1,
-controls:0
+controls:1,
+rel:0
 },
 
 events:{
@@ -1214,7 +1221,9 @@ if(ytPlayer){
 let current =
 ytPlayer.getVolume();
 
+if(current < 100){
 ytPlayer.setVolume(current + 10);
+}
 
 }
 
@@ -1227,7 +1236,9 @@ if(ytPlayer){
 let current =
 ytPlayer.getVolume();
 
+if(current > 0){
 ytPlayer.setVolume(current - 10);
+}
 
 }
 
