@@ -103,12 +103,7 @@ socket.emit("queueUpdate",queue);
 /* =========================
 NEXT SONG
 ========================= */
-
-socket.on("songEnded",()=>{
-
-startNextSong();
-
-});
+  
 
 /* =========================
 REQUEST SONG
