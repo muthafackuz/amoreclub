@@ -15,17 +15,72 @@ origin:"*"
 }
 });
 
-/* DANCEFLOOR */
+/* =========================
+DANCEFLOOR
+========================= */
 
 let dancers = [];
 
-/* MUSIC SYSTEM */
+/* =========================
+MUSIC SYSTEM
+========================= */
 
-let currentVideo = "qKjJeQCpbZk";
+let queue = [
+
+{
+videoId:"kJQP7kiw5Fk",
+title:"Despacito",
+requestedBy:"System"
+},
+
+{
+videoId:"fRh_vgS2dFE",
+title:"Justin Timberlake",
+requestedBy:"System"
+}
+
+];
+
+let currentSongIndex = 0;
+
+let currentVideo = queue[0].videoId;
 
 let videoStartedAt = Date.now();
 
-/* SOCKET CONNECTION */
+/* =========================
+HELPERS
+========================= */
+
+function startNextSong(){
+
+currentSongIndex++;
+
+if(currentSongIndex >= queue.length){
+
+currentSongIndex = 0;
+
+}
+
+currentVideo =
+queue[currentSongIndex].videoId;
+
+videoStartedAt = Date.now();
+
+io.emit("musicSync",{
+
+videoId: currentVideo,
+
+startedAt: videoStartedAt
+
+});
+
+console.log("Now playing:",currentVideo);
+
+}
+
+/* =========================
+SOCKET CONNECTION
+========================= */
 
 io.on("connection",(socket)=>{
 
@@ -41,7 +96,45 @@ startedAt: videoStartedAt
 
 });
 
-/* JOIN DANCEFLOOR */
+/* SEND QUEUE */
+
+socket.emit("queueUpdate",queue);
+
+/* =========================
+NEXT SONG
+========================= */
+
+socket.on("songEnded",()=>{
+
+startNextSong();
+
+});
+
+/* =========================
+REQUEST SONG
+========================= */
+
+socket.on("requestSong",(song)=>{
+
+queue.push({
+
+videoId:song.videoId,
+
+title:song.title,
+
+requestedBy:song.requestedBy
+
+});
+
+io.emit("queueUpdate",queue);
+
+console.log("Song added:",song.title);
+
+});
+
+/* =========================
+JOIN DANCEFLOOR
+========================= */
 
 socket.on("joinDancefloor",(user)=>{
 
@@ -82,7 +175,9 @@ io.emit("dancefloorUpdate",dancers);
 
 });
 
-/* LEAVE DANCEFLOOR */
+/* =========================
+LEAVE DANCEFLOOR
+========================= */
 
 socket.on("leaveDancefloor",()=>{
 
@@ -98,7 +193,9 @@ dancers
 
 });
 
-/* DISCONNECT */
+/* =========================
+DISCONNECT
+========================= */
 
 socket.on("disconnect",()=>{
 
@@ -116,7 +213,9 @@ dancers
 
 });
 
-/* START SERVER */
+/* =========================
+START SERVER
+========================= */
 
 server.listen(3000,()=>{
 
