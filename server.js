@@ -28,6 +28,13 @@ MUSIC SYSTEM
 let requests = [];
 let playlist = [];
 
+function updatePlaylist(){
+  playlist = [...requests]
+  .sort((a,b)=> b.votes - a.votes);
+
+  io.emit("playlistUpdate", playlist);
+}
+
 {
 videoId:"kJQP7kiw5Fk",
 title:"Despacito",
@@ -77,9 +84,25 @@ startedAt: videoStartedAt
 socket.emit("queueUpdate",queue);
 
 /* =========================
-NEXT SONG
+novoto
 ========================= */
-  
+socket.on("addRequest",(data)=>{
+
+const song = {
+id: Date.now().toString(),
+videoId: data.videoId,
+title: data.title,
+votes: 0,
+createdAt: Date.now()
+};
+
+requests.push(song);
+
+updatePlaylist();
+
+io.emit("requestsUpdate", requests);
+
+});  
 
 /* =========================
 REQUEST SONG
