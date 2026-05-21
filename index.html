@@ -26,7 +26,7 @@ overflow:hidden;
 /* TOP BAR */
 
 .top-bar{
-height:90px;
+height:80px;
 background:#111827;
 border-bottom:2px solid #ff0077;
 
@@ -42,7 +42,7 @@ padding:0 20px;
 .dj-player{
 
 width:700px;
-height:70px;
+height:60px;
 
 background:#18181f;
 
@@ -62,7 +62,7 @@ box-shadow:
 
 #youtubePlayer{
 width:700px;
-height:70px;
+height:60px;
 }
 
 .player-controls{
@@ -89,21 +89,20 @@ background:#ff0077;
 
 .main{
 display:flex;
-height:calc(100vh - 110px);
-padding:20px;
-gap:20px;
+height:calc(100vh - 80px);
 }
 
 /* LEFT */
 
 .left-panel{
 width:40%;
+padding:20px;
 }
 
 /* DANCEFLOOR */
 
 .dancefloor-box{
-height:calc(100vh - 150px);
+height:100%;
 
 background:#111827;
 
@@ -146,6 +145,8 @@ overflow:hidden;
 
 .right-panel{
 width:60%;
+padding:20px;
+
 display:flex;
 flex-direction:column;
 gap:20px;
@@ -189,7 +190,7 @@ background:#ff0077;
 /* CHAT */
 
 .chat-box{
-height:calc(100% - 140px);
+flex:1;
 
 background:#111827;
 
@@ -387,6 +388,7 @@ box-shadow:0 0 20px rgba(255,0,119,0.3);
 
 <div class="dj-player">
 <div id="youtubePlayer"></div>
+</div>
 
 <div class="player-controls">
 
@@ -620,6 +622,8 @@ onclick="closeRegisterModal()"
 <script src="https://www.youtube.com/iframe_api"></script>
 <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 
+<!-- FIREBASE -->
+
 <script type="module">
 
 const IMGBB_API_KEY =
@@ -662,10 +666,12 @@ appId: "1:732025669965:web:ce3f70fe0b7ab75ca34f04"
 };
 
 const app = initializeApp(firebaseConfig);
+
 const auth = getAuth(app);
+
 const db = getFirestore(app);
 
-window.socket =
+const socket =
 io("https://amoreclub-server.onrender.com");
 
 let isDancing = false;
@@ -960,16 +966,6 @@ window.sendMessage();
 
 });
 
-document
-.getElementById("chatInput")
-.addEventListener("keydown",(e)=>{
-
-if(e.key === "Enter"){
-window.sendMessage();
-}
-
-});
-
 const q = query(
 collection(db,"chat"),
 orderBy("createdAt")
@@ -1159,6 +1155,85 @@ avatar:avatar
 };
 
 </script>
-  
+
+<script>
+
+let ytPlayer;
+
+/* YOUTUBE PLAYER */
+
+window.onYouTubeIframeAPIReady = () => {
+
+ytPlayer = new YT.Player('youtubePlayer', {
+
+height:'60',
+width:'700',
+
+videoId:'kJQP7kiw5Fk',
+
+playerVars:{
+autoplay:1,
+controls:0
+},
+
+events:{
+onReady:(event)=>{
+
+event.target.setVolume(50);
+event.target.playVideo();
+
+}
+}
+
+});
+
+};
+
+/* PLAYER BUTTONS */
+
+function playMusic(){
+
+if(ytPlayer){
+ytPlayer.playVideo();
+}
+
+}
+
+function pauseMusic(){
+
+if(ytPlayer){
+ytPlayer.pauseVideo();
+}
+
+}
+
+function volumeUp(){
+
+if(ytPlayer){
+
+let current =
+ytPlayer.getVolume();
+
+ytPlayer.setVolume(current + 10);
+
+}
+
+}
+
+function volumeDown(){
+
+if(ytPlayer){
+
+let current =
+ytPlayer.getVolume();
+
+ytPlayer.setVolume(current - 10);
+
+}
+
+}
+
+</script>
+
 </body>
 </html>
