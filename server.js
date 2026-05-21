@@ -36,7 +36,29 @@ function updatePlaylist(){
 
   io.emit("playlistUpdate", playlist);
 }
+function startDJ(){
 
+if(songTimer) return;
+
+songTimer = setInterval(()=>{
+
+if(playlist.length === 0) return;
+
+const topSong = playlist[0];
+
+if(!currentSong || currentSong.id !== topSong.id){
+
+currentSong = topSong;
+
+io.emit("playSong", currentSong);
+
+console.log("Now playing:", currentSong.title);
+
+}
+
+},5000);
+
+}
 let requests = [
 {
 id: "1",
@@ -84,7 +106,8 @@ if(!song) return;
 song.votes += 1;
 
 updatePlaylist();
-
+startDJ();
+  
 io.emit("requestsUpdate", requests);
 
 });
@@ -125,7 +148,8 @@ createdAt: Date.now()
 requests.push(song);
 
 updatePlaylist();
-
+startDJ();
+  
 io.emit("requestsUpdate", requests);
 
 });  
