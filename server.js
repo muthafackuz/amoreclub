@@ -25,7 +25,8 @@ let dancers = [];
 MUSIC SYSTEM
 ========================= */
 
-let queue = [
+let requests = [];
+let playlist = [];
 
 {
 videoId:"kJQP7kiw5Fk",
