@@ -21,33 +21,25 @@ let dancers = [];
 
 /* MUSIC SYSTEM */
 
-let playerState = {
+let currentVideo = "qKjJeQCpbZk";
 
-videoId: "qKjJeQCpbZk",
-
-startedAt: Date.now(),
-
-paused: false
-
-};
+let videoStartedAt = Date.now();
 
 /* SOCKET CONNECTION */
 
 io.on("connection",(socket)=>{
 
-console.log("User connected:",socket.id);
+console.log("User connected");
 
 /* SEND CURRENT MUSIC */
 
-socket.emit("musicSync",playerState);
+socket.emit("currentMusic",{
 
-/* PERIODIC RESYNC */
+videoId:currentVideo,
 
-const syncInterval = setInterval(()=>{
+startedAt:videoStartedAt
 
-socket.emit("musicSync",playerState);
-
-},25000);
+});
 
 /* JOIN DANCEFLOOR */
 
@@ -60,7 +52,9 @@ d => d.nickname === user.nickname
 
 if(alreadyExists){
 
-socket.emit("alreadyDancing");
+socket.emit(
+"alreadyDancing"
+);
 
 return;
 
@@ -69,15 +63,11 @@ return;
 const dancer = {
 
 id: socket.id,
-
 nickname: user.nickname,
-
 gender: user.gender,
-
 avatar: user.avatar,
 
 x: Math.floor(Math.random()*80),
-
 y: Math.floor(Math.random()*80)
 
 };
@@ -93,14 +83,9 @@ io.emit("dancefloorUpdate",dancers);
 socket.on("leaveDancefloor",()=>{
 
 dancers =
-dancers.filter(
-d => d.id !== socket.id
-);
+dancers.filter(d=>d.id !== socket.id);
 
-io.emit(
-"dancefloorUpdate",
-dancers
-);
+io.emit("dancefloorUpdate",dancers);
 
 });
 
@@ -108,19 +93,10 @@ dancers
 
 socket.on("disconnect",()=>{
 
-console.log("Disconnected:",socket.id);
-
-clearInterval(syncInterval);
-
 dancers =
-dancers.filter(
-d => d.id !== socket.id
-);
+dancers.filter(d=>d.id !== socket.id);
 
-io.emit(
-"dancefloorUpdate",
-dancers
-);
+io.emit("dancefloorUpdate",dancers);
 
 });
 
@@ -130,6 +106,6 @@ dancers
 
 server.listen(3000,()=>{
 
-console.log("Server running on port 3000");
+console.log("Server running");
 
 });
