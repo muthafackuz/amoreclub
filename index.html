@@ -1154,9 +1154,20 @@ avatar:avatar
 
 };
 
-</script>
+  /* =========================
+YOUTUBE PLAYER
+========================= */
 
-<script>
+/* LOAD API */
+
+const ytScript =
+document.createElement("script");
+
+ytScript.src =
+"https://www.youtube.com/iframe_api";
+
+document.body.appendChild(ytScript);
+
 window.ytPlayer = null;
 
 window.currentVideoId = "";
@@ -1164,12 +1175,15 @@ window.musicStartedAt = 0;
 
 /* RECEIVE MUSIC */
 
-window.socket.on("musicSync",(data)=>{
+socket.on("musicSync",(data)=>{
 
 console.log("musicSync",data);
 
-window.currentVideoId = data.videoId;
-window.musicStartedAt = data.startedAt;
+window.currentVideoId =
+data.videoId;
+
+window.musicStartedAt =
+data.startedAt;
 
 if(window.ytPlayer){
 
@@ -1188,7 +1202,7 @@ window.ytPlayer.playVideo();
 
 });
 
-/* YOUTUBE API */
+/* YOUTUBE READY */
 
 window.onYouTubeIframeAPIReady = () => {
 
@@ -1297,9 +1311,7 @@ window.ytPlayer.setVolume(v - 10);
 }
 
 };
-
-
 </script>
-
+  
 </body>
 </html>
