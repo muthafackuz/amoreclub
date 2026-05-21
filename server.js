@@ -35,17 +35,24 @@ function updatePlaylist(){
   io.emit("playlistUpdate", playlist);
 }
 
+let requests = [
 {
-videoId:"kJQP7kiw5Fk",
-title:"Despacito",
-requestedBy:"System"
+id: "1",
+videoId: "kJQP7kiw5Fk",
+title: "Despacito",
+votes: 0,
+createdAt: Date.now()
 },
-
 {
-videoId:"fRh_vgS2dFE",
-title:"Justin Timberlake",
-requestedBy:"System"
+id: "2",
+videoId: "fRh_vgS2dFE",
+title: "Justin Timberlake",
+votes: 0,
+createdAt: Date.now()
 }
+];
+
+let playlist = [];
 
 ];
 
@@ -81,7 +88,7 @@ startedAt: videoStartedAt
 
 /* SEND QUEUE */
 
-socket.emit("queueUpdate",queue);
+
 
 /* =========================
 novoto
