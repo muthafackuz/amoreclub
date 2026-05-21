@@ -115,23 +115,7 @@ io.emit("requestsUpdate", requests);
 REQUEST SONG
 ========================= */
 
-socket.on("requestSong",(song)=>{
 
-queue.push({
-
-videoId:song.videoId,
-
-title:song.title,
-
-requestedBy:song.requestedBy
-
-});
-
-io.emit("queueUpdate",queue);
-
-console.log("Song added:",song.title);
-
-});
 
 /* =========================
 JOIN DANCEFLOOR
