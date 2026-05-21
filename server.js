@@ -73,7 +73,20 @@ SOCKET CONNECTION
 ========================= */
 
 io.on("connection",(socket)=>{
+socket.on("voteSong",(id)=>{
 
+const song = requests.find(s => s.id === id);
+
+if(!song) return;
+
+song.votes += 1;
+
+updatePlaylist();
+
+io.emit("requestsUpdate", requests);
+
+});
+  
 console.log("User connected");
 /* 👇 ТУК СЕ СЛАГАТ */
 
