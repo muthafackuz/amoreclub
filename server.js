@@ -27,6 +27,8 @@ MUSIC SYSTEM
 
 let requests = [];
 let playlist = [];
+let currentSong = null;
+let songTimer = null;
 
 function updatePlaylist(){
   playlist = [...requests]
