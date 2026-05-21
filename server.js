@@ -38,7 +38,7 @@ function updatePlaylist(){
 }
 function startDJ(){
 
-if(songTimer) return;
+if(songTimer) return; // ⛔ вече работи
 
 songTimer = setInterval(()=>{
 
@@ -46,7 +46,10 @@ if(playlist.length === 0) return;
 
 const topSong = playlist[0];
 
-if(!currentSong || currentSong.id !== topSong.id){
+// ⛔ ако вече свири тази песен → не правим нищо
+if(currentSong && currentSong.id === topSong.id){
+return;
+}
 
 currentSong = topSong;
 
@@ -54,10 +57,21 @@ io.emit("playSong", currentSong);
 
 console.log("Now playing:", currentSong.title);
 
-}
-
 },5000);
 
+}
+function resetDJ(){
+
+if(songTimer){
+clearInterval(songTimer);
+songTimer = null;
+}
+
+currentSong = null;
+
+}
+if(!songTimer){
+startDJ();
 }
 let requests = [
 {
@@ -106,7 +120,7 @@ if(!song) return;
 song.votes += 1;
 
 updatePlaylist();
-startDJ();
+
   
 io.emit("requestsUpdate", requests);
 
