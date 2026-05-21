@@ -42,7 +42,7 @@ padding:0 20px;
 .dj-player{
 
 width:700px;
-height:120px;
+height:70px;
 
 background:#18181f;
 
@@ -62,7 +62,7 @@ box-shadow:
 
 #youtubePlayer{
 width:700px;
-height:120px;
+height:70px;
 }
 
 .player-controls{
@@ -1160,9 +1160,26 @@ avatar:avatar
 
 };
 
-  /* ========================= */
-/* YOUTUBE PLAYER SYSTEM */
-/* ========================= */
+</script>
+  <script>
+
+window.addEventListener("load",()=>{
+
+const waitForSocket = setInterval(()=>{
+
+if(window.socket){
+
+clearInterval(waitForSocket);
+
+startYouTubeSystem();
+
+}
+
+},100);
+
+});
+
+function startYouTubeSystem(){
 
 window.ytPlayer = null;
 
@@ -1171,27 +1188,27 @@ window.musicStartedAt = 0;
 
 window.playerReady = false;
 
-/* RECEIVE MUSIC SYNC */
+/* RECEIVE MUSIC */
 
 window.socket.on("musicSync",(data)=>{
 
-console.log("Music sync received",data);
+console.log("Music sync",data);
 
 window.currentVideoId = data.videoId;
 
 window.musicStartedAt = data.startedAt;
 
-if(!window.playerReady || !window.ytPlayer){
-return;
-}
+if(window.playerReady){
 
 syncPlayer();
 
+}
+
 });
 
-/* PLAYER SYNC FUNCTION */
+/* PLAYER SYNC */
 
-function syncPlayer(){
+window.syncPlayer = () => {
 
 if(!window.ytPlayer){
 return;
@@ -1213,8 +1230,6 @@ window.ytPlayer.getCurrentTime() || 0
 
 if(currentVideo !== window.currentVideoId){
 
-console.log("Loading new video");
-
 window.ytPlayer.loadVideoById({
 videoId: window.currentVideoId,
 startSeconds: serverTime
@@ -1233,8 +1248,6 @@ Math.abs(currentTime - serverTime);
 
 if(drift > 2){
 
-console.log("Correcting drift:",drift);
-
 window.ytPlayer.seekTo(serverTime,true);
 
 }
@@ -1250,18 +1263,20 @@ window.ytPlayer.playVideo();
 
 }
 
-}
+};
 
-/* YOUTUBE PLAYER */
+/* YOUTUBE API READY */
 
 window.onYouTubeIframeAPIReady = () => {
 
-window.ytPlayer = new YT.Player('youtubePlayer',{
+console.log("YouTube API Ready");
 
-height:'120',
-width:'700',
+window.ytPlayer = new YT.Player("youtubePlayer",{
 
-videoId:'',
+height:"120",
+width:"700",
+
+videoId:"",
 
 playerVars:{
 autoplay:1,
@@ -1275,29 +1290,15 @@ events:{
 
 onReady:(event)=>{
 
-console.log("YouTube Player Ready");
+console.log("Player Ready");
 
 window.playerReady = true;
 
-/* FIRST SYNC */
-
-if(window.currentVideoId){
-
-syncPlayer();
-
-}
-
-/* USER INTERACTION REQUIRED */
-
 document.body.addEventListener("click",()=>{
-
-if(window.ytPlayer){
 
 window.ytPlayer.unMute();
 
 window.ytPlayer.playVideo();
-
-}
 
 },{
 once:true
@@ -1309,19 +1310,21 @@ once:true
 
 });
 
-/* PERIODIC CLIENT RESYNC */
+};
+
+/* PERIODIC RESYNC */
 
 setInterval(()=>{
 
 if(window.playerReady){
 
-syncPlayer();
+window.syncPlayer();
 
 }
 
 },15000);
 
-};
+}
 
 /* PLAYER BUTTONS */
 
@@ -1351,8 +1354,6 @@ window.volumeUp = () => {
 
 if(window.ytPlayer){
 
-window.ytPlayer.unMute();
-
 let current =
 window.ytPlayer.getVolume();
 
@@ -1370,8 +1371,6 @@ window.volumeDown = () => {
 
 if(window.ytPlayer){
 
-window.ytPlayer.unMute();
-
 let current =
 window.ytPlayer.getVolume();
 
@@ -1384,6 +1383,7 @@ window.ytPlayer.setVolume(current - 10);
 }
 
 };
+
 </script>
 </body>
 </html>
