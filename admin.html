@@ -1,1 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AmoreClub Admin</title>
+<style>
+body{
+background:#0a0a0f;
+color:white;
+font-family:Arial;
+padding:20px;
+}
 
+input,button{
+padding:12px;
+margin:10px 0;
+width:100%;
+border-radius:10px;
+border:none;
+}
+
+input{
+background:#1f2937;
+color:white;
+}
+
+button{
+background:#ff0077;
+color:white;
+font-weight:bold;
+cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h2>🎛 ADMIN PANEL</h2>
+
+<input id="videoId" placeholder="YouTube Video ID">
+<input id="title" placeholder="Title">
+
+<button onclick="sendRequest()">➕ Add Request</button>
+
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+
+<script>
+const socket = io("https://amoreclub-server.onrender.com");
+
+function sendRequest(){
+
+const videoId = document.getElementById("videoId").value;
+const title = document.getElementById("title").value;
+
+if(!videoId){
+alert("Missing video ID");
+return;
+}
+
+socket.emit("addRequest",{
+videoId,
+title: title || "No title"
+});
+
+alert("Added to requests");
+
+document.getElementById("videoId").value = "";
+document.getElementById("title").value = "";
+}
+</script>
+
+</body>
+</html>
