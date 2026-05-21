@@ -62,7 +62,8 @@ box-shadow:
 
 #youtubePlayer{
 width:700px;
-height:60px;
+height:80px;
+background:black;
 }
 
 .player-controls{
@@ -387,7 +388,7 @@ box-shadow:0 0 20px rgba(255,0,119,0.3);
 <div class="top-bar">
 
 <div class="dj-player">
-<div id="youtubePlayer" style="width:700px;height:70px;"></div>
+<div id="youtubePlayer" style="width:700px;height:80px;"></div>
 </div>
 
 <div class="player-controls">
@@ -1218,9 +1219,10 @@ videoId:"",
 
 playerVars:{
 autoplay:1,
-controls:0,
+controls:1,
+mute:1,
 rel:0,
-mute:1
+playsinline:1
 },
 
 events:{
