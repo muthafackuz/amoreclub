@@ -21,25 +21,33 @@ let dancers = [];
 
 /* MUSIC SYSTEM */
 
-let currentVideo = "qKjJeQCpbZk";
+let playerState = {
 
-let videoStartedAt = Date.now();
+videoId: "qKjJeQCpbZk",
+
+startedAt: Date.now(),
+
+paused: false
+
+};
 
 /* SOCKET CONNECTION */
 
 io.on("connection",(socket)=>{
 
-console.log("User connected");
+console.log("User connected:",socket.id);
 
 /* SEND CURRENT MUSIC */
 
-socket.emit("musicSync",{
+socket.emit("musicSync",playerState);
 
-videoId: currentVideo,
+/* PERIODIC RESYNC */
 
-startedAt: videoStartedAt
+const syncInterval = setInterval(()=>{
 
-});
+socket.emit("musicSync",playerState);
+
+},25000);
 
 /* JOIN DANCEFLOOR */
 
@@ -52,9 +60,7 @@ d => d.nickname === user.nickname
 
 if(alreadyExists){
 
-socket.emit(
-"alreadyDancing"
-);
+socket.emit("alreadyDancing");
 
 return;
 
@@ -102,6 +108,10 @@ dancers
 
 socket.on("disconnect",()=>{
 
+console.log("Disconnected:",socket.id);
+
+clearInterval(syncInterval);
+
 dancers =
 dancers.filter(
 d => d.id !== socket.id
@@ -120,6 +130,6 @@ dancers
 
 server.listen(3000,()=>{
 
-console.log("Server running");
+console.log("Server running on port 3000");
 
 });
