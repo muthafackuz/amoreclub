@@ -75,7 +75,11 @@ SOCKET CONNECTION
 io.on("connection",(socket)=>{
 
 console.log("User connected");
+/* 👇 ТУК СЕ СЛАГАТ */
 
+socket.emit("requestsUpdate", requests);
+socket.emit("playlistUpdate", playlist);
+  
 /* SEND CURRENT MUSIC */
 
 socket.emit("musicSync",{
