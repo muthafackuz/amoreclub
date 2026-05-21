@@ -1157,14 +1157,6 @@ avatar:avatar
 </script>
 
 <script>
-
-window.addEventListener("load",()=>{
-
-if(!window.socket){
-console.log("Socket missing");
-return;
-}
-
 window.ytPlayer = null;
 
 window.currentVideoId = "";
@@ -1306,7 +1298,6 @@ window.ytPlayer.setVolume(v - 10);
 
 };
 
-});
 
 </script>
 
