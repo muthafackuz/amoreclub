@@ -1257,7 +1257,15 @@ once:true
 });
 
 }
+onStateChange:(event)=>{
 
+if(event.data === 0){
+
+socket.emit("songEnded");
+
+}
+
+},
 }
 
 });
