@@ -43,7 +43,7 @@ requestedBy:"System"
 
 let currentSongIndex = 0;
 
-let currentVideo = queue[0].videoId;
+let currentVideo = "qKjJeQCpbZk";
 
 let videoStartedAt = Date.now();
 
