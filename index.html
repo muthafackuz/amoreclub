@@ -1160,9 +1160,9 @@ avatar:avatar
 
 };
 
-</script>
-
-<script>
+  /* ========================= */
+/* YOUTUBE PLAYER SYSTEM */
+/* ========================= */
 
 window.ytPlayer = null;
 
@@ -1325,7 +1325,7 @@ syncPlayer();
 
 /* PLAYER BUTTONS */
 
-function playMusic(){
+window.playMusic = () => {
 
 if(window.ytPlayer){
 
@@ -1335,9 +1335,9 @@ window.ytPlayer.playVideo();
 
 }
 
-}
+};
 
-function pauseMusic(){
+window.pauseMusic = () => {
 
 if(window.ytPlayer){
 
@@ -1345,9 +1345,9 @@ window.ytPlayer.pauseVideo();
 
 }
 
-}
+};
 
-function volumeUp(){
+window.volumeUp = () => {
 
 if(window.ytPlayer){
 
@@ -1364,9 +1364,9 @@ window.ytPlayer.setVolume(current + 10);
 
 }
 
-}
+};
 
-function volumeDown(){
+window.volumeDown = () => {
 
 if(window.ytPlayer){
 
@@ -1383,8 +1383,7 @@ window.ytPlayer.setVolume(current - 10);
 
 }
 
-}
-
+};
 </script>
 </body>
 </html>
