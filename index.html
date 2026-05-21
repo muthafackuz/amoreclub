@@ -1169,30 +1169,88 @@ window.ytPlayer = null;
 window.currentVideoId = "";
 window.musicStartedAt = 0;
 
-/* RECEIVE MUSIC FROM SERVER */
+window.playerReady = false;
 
-window.socket.on("currentMusic",(data)=>{
+/* RECEIVE MUSIC SYNC */
+
+window.socket.on("musicSync",(data)=>{
+
+console.log("Music sync received",data);
 
 window.currentVideoId = data.videoId;
 
 window.musicStartedAt = data.startedAt;
 
-if(window.ytPlayer){
+if(!window.playerReady || !window.ytPlayer){
+return;
+}
 
-const seconds = Math.floor(
+syncPlayer();
+
+});
+
+/* PLAYER SYNC FUNCTION */
+
+function syncPlayer(){
+
+if(!window.ytPlayer){
+return;
+}
+
+const serverTime = Math.floor(
 (Date.now() - window.musicStartedAt) / 1000
 );
 
+const currentVideo =
+window.ytPlayer.getVideoData().video_id || "";
+
+const currentTime =
+Math.floor(
+window.ytPlayer.getCurrentTime() || 0
+);
+
+/* LOAD NEW VIDEO */
+
+if(currentVideo !== window.currentVideoId){
+
+console.log("Loading new video");
+
 window.ytPlayer.loadVideoById({
 videoId: window.currentVideoId,
-startSeconds: seconds
+startSeconds: serverTime
 });
+
+window.ytPlayer.playVideo();
+
+return;
+
+}
+
+/* DRIFT CORRECTION */
+
+const drift =
+Math.abs(currentTime - serverTime);
+
+if(drift > 2){
+
+console.log("Correcting drift:",drift);
+
+window.ytPlayer.seekTo(serverTime,true);
+
+}
+
+/* ENSURE PLAYING */
+
+const state =
+window.ytPlayer.getPlayerState();
+
+if(state !== 1){
 
 window.ytPlayer.playVideo();
 
 }
 
-});
+}
 
 /* YOUTUBE PLAYER */
 
@@ -1209,33 +1267,37 @@ playerVars:{
 autoplay:1,
 controls:0,
 mute:1,
-rel:0
+rel:0,
+playsinline:1
 },
 
 events:{
 
 onReady:(event)=>{
 
+console.log("YouTube Player Ready");
+
+window.playerReady = true;
+
+/* FIRST SYNC */
+
 if(window.currentVideoId){
 
-const seconds = Math.floor(
-(Date.now() - window.musicStartedAt) / 1000
-);
-
-event.target.loadVideoById({
-videoId: window.currentVideoId,
-startSeconds: seconds
-});
-
-event.target.playVideo();
+syncPlayer();
 
 }
 
-/* UNMUTE AFTER CLICK */
+/* USER INTERACTION REQUIRED */
 
 document.body.addEventListener("click",()=>{
 
-event.target.unMute();
+if(window.ytPlayer){
+
+window.ytPlayer.unMute();
+
+window.ytPlayer.playVideo();
+
+}
 
 },{
 once:true
@@ -1246,6 +1308,18 @@ once:true
 }
 
 });
+
+/* PERIODIC CLIENT RESYNC */
+
+setInterval(()=>{
+
+if(window.playerReady){
+
+syncPlayer();
+
+}
+
+},15000);
 
 };
 
