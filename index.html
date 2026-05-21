@@ -388,8 +388,17 @@ box-shadow:0 0 20px rgba(255,0,119,0.3);
 <div class="top-bar">
 
 <div class="dj-player">
-<div id="youtubePlayer" style="width:700px;height:80px;"></div>
-</div>
+<iframe
+id="youtubePlayer"
+width="700"
+height="80"
+src=""
+title="YouTube video player"
+frameborder="0"
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+allowfullscreen
+style="border:none;border-radius:12px;"
+></iframe>
 
 <div class="player-controls">
 
@@ -1154,31 +1163,10 @@ avatar:avatar
 });
 
 };
-
-  /* =========================
-YOUTUBE PLAYER
-========================= */
-
-/* LOAD API */
-
-const ytScript =
-document.createElement("script");
-
-ytScript.src =
-"https://www.youtube.com/iframe_api";
-
-document.body.appendChild(ytScript);
-
-window.ytPlayer = null;
-
 window.currentVideoId = "";
 window.musicStartedAt = 0;
 
-/* RECEIVE MUSIC */
-
 socket.on("musicSync",(data)=>{
-
-console.log("musicSync",data);
 
 window.currentVideoId =
 data.videoId;
@@ -1186,139 +1174,18 @@ data.videoId;
 window.musicStartedAt =
 data.startedAt;
 
-if(window.ytPlayer){
-
 const seconds = Math.floor(
 (Date.now() - window.musicStartedAt) / 1000
 );
 
-window.ytPlayer.loadVideoById({
-videoId:window.currentVideoId,
-startSeconds:seconds
-});
+const iframe =
+document.getElementById("youtubePlayer");
 
-window.ytPlayer.playVideo();
-
-}
+iframe.src =
+`https://www.youtube-nocookie.com/embed/${window.currentVideoId}?autoplay=1&start=${seconds}&controls=1`;
 
 });
 
-/* YOUTUBE READY */
-
-window.onYouTubeIframeAPIReady = () => {
-
-console.log("YouTube Ready");
-
-window.ytPlayer =
-new YT.Player("youtubePlayer",{
-
-height:"70",
-width:"700",
-
-videoId:"",
-
-playerVars:{
-autoplay:1,
-controls:1,
-mute:1,
-rel:0,
-playsinline:1,
-origin: window.location.origin,
-enablejsapi:1
-},
-
-events:{
-
-onReady:(event)=>{
-
-console.log("Player Ready");
-
-if(window.currentVideoId){
-
-const seconds = Math.floor(
-(Date.now() - window.musicStartedAt) / 1000
-);
-
-event.target.loadVideoById({
-videoId:window.currentVideoId,
-startSeconds:seconds
-});
-
-event.target.playVideo();
-
-}
-
-document.body.addEventListener("click",()=>{
-
-event.target.unMute();
-
-},{
-once:true
-});
-
-}
-
-}
-
-});
-
-};
-
-/* CONTROLS */
-
-window.playMusic = () => {
-
-if(window.ytPlayer){
-setTimeout(()=>{
-
-window.ytPlayer.playVideo();
-
-},1000);
-}
-
-};
-
-window.pauseMusic = () => {
-
-if(window.ytPlayer){
-window.ytPlayer.pauseVideo();
-}
-
-};
-
-window.volumeUp = () => {
-
-if(window.ytPlayer){
-
-let v =
-window.ytPlayer.getVolume();
-
-if(v < 100){
-
-window.ytPlayer.setVolume(v + 10);
-
-}
-
-}
-
-};
-
-window.volumeDown = () => {
-
-if(window.ytPlayer){
-
-let v =
-window.ytPlayer.getVolume();
-
-if(v > 0){
-
-window.ytPlayer.setVolume(v - 10);
-
-}
-
-}
-
-};
 </script>
   
 </body>
