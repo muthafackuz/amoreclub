@@ -51,32 +51,7 @@ let videoStartedAt = Date.now();
 HELPERS
 ========================= */
 
-function startNextSong(){
 
-currentSongIndex++;
-
-if(currentSongIndex >= queue.length){
-
-currentSongIndex = 0;
-
-}
-
-currentVideo =
-queue[currentSongIndex].videoId;
-
-videoStartedAt = Date.now();
-
-io.emit("musicSync",{
-
-videoId: currentVideo,
-
-startedAt: videoStartedAt
-
-});
-
-console.log("Now playing:",currentVideo);
-
-}
 
 /* =========================
 SOCKET CONNECTION
