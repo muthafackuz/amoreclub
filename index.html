@@ -492,7 +492,21 @@ onclick="openLoginModal()"
 </div>
 
 <div class="chat-input-area">
+<div style="display:flex;gap:10px;margin-bottom:10px;">
+  <input
+    id="songInput"
+    placeholder="YouTube Video ID (пример: kJQP7kiw5Fk)"
+    style="flex:1;padding:10px;border-radius:10px;border:none;background:#1f2937;color:white;"
+  >
+  <button
+    onclick="requestSong()"
+    style="background:#00e5ff;border:none;padding:10px 15px;border-radius:10px;font-weight:bold;cursor:pointer;"
+  >
+    DJ ➕
+  </button>
+</div>
 
+<div id="queueBox" style="font-size:12px;opacity:0.8;margin-bottom:10px;"></div>
 <input
 class="chat-input"
 id="chatInput"
@@ -1202,7 +1216,23 @@ window.ytPlayer.playVideo();
 }
 
 });
+socket.on("queueUpdate",(queue)=>{
 
+const box = document.getElementById("queueBox");
+
+if(!box) return;
+
+box.innerHTML = "<b>Queue:</b><br>";
+
+queue.forEach((song,i)=>{
+
+box.innerHTML += `
+${i+1}. ${song.videoId}<br>
+`;
+
+});
+
+});
 /* YOUTUBE READY */
 
 window.onYouTubeIframeAPIReady = () => {
@@ -1317,6 +1347,28 @@ window.ytPlayer.setVolume(v - 10);
 }
 
 }
+
+};
+  window.requestSong = () => {
+
+const input = document.getElementById("songInput");
+
+const videoId = input.value.trim();
+
+if(!videoId){
+showMessage("Въведи YouTube Video ID");
+return;
+}
+
+socket.emit("requestSong",{
+videoId: videoId,
+title: "User Song",
+requestedBy: auth.currentUser?.displayName || "Guest"
+});
+
+input.value = "";
+
+showMessage("Песента е изпратена към DJ-a");
 
 };
 </script>
