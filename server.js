@@ -20,15 +20,18 @@ DANCEFLOOR
 ========================= */
 
 let dancers = [];
+let requests = [];
+let playlist = [];
 
+let currentSong = null;
+
+let SONG_DURATION = 180;
+let songStartTime = Date.now();
 /* =========================
 MUSIC SYSTEM
 ========================= */
 
-let requests = [];
-let playlist = [];
-let currentSong = null;
-let songTimer = null;
+
 
 function updatePlaylist(){
   playlist = [...requests]
@@ -94,9 +97,9 @@ let playlist = [];
 
 ];
 
-let currentSongIndex = 0;
 
-let currentVideo = "qKjJeQCpbZk";
+
+
 
 let videoStartedAt = Date.now();
 
