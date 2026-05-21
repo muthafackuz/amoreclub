@@ -21,7 +21,7 @@ let dancers = [];
 
 /* MUSIC SYSTEM */
 
-let currentVideo = "qKjJeQCpbZk";
+let currentVideo = "kJQP7kiw5Fk";
 
 let videoStartedAt = Date.now();
 
