@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>За нас - BGПерли</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --accent: #10b981;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem;
+      background: #020617;
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    nav a {
+      color: var(--text);
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-weight: 500;
+    }
+    nav a.active {
+      background: var(--accent);
+      color: #000;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 3rem auto;
+      padding: 0 1.5rem;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 2.5rem;
+      border: 1px solid var(--border);
+    }
+    h1 {
+      color: var(--accent);
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="index.html" class="logo">BGПерли 🌲</a>
+    <nav>
+      <a href="index.html">Дестинации</a>
+      <a href="salary.html">Калкулатор Заплата</a>
+      <a href="about.html" class="active">За нас</a>
+      <a href="contacts.html">Контакти</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="card">
+      <h1>За сайта BGПерли</h1>
+      <p>
+        Добре дошли в <strong>BGПерли</strong> — вашият онлайн пътеводител за най-красивите забележителности и дестинации за разходка в България!
+      </p>
+      <p>
+        Нашата мисия е да улесним планирането на вашето следващо пътуване. Чрез нашата платформа можете бързо да откриете водопади, пещери, исторически крепости и планински върхове, както и предварително да изчислите разходите си за гориво спрямо разстоянието.
+      </p>
+      <p>
+        Освен туристически гид, ние предоставяме и полезни инструменти за ежедневието, като нашия финансов калкулатор за заплати.
+      </p>
+    </div>
+  </div>
+
+</body>
+</html>
