@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Калкулатор Заплата - BGПерли</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --accent: #10b981;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem;
+      background: #020617;
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    nav a {
+      color: var(--text);
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-weight: 500;
+    }
+    nav a.active {
+      background: var(--accent);
+      color: #000;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 2rem;
+      border: 1px solid var(--border);
+    }
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--text-muted);
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 0.8rem;
+      background: #020617;
+      border: 1px solid var(--border);
+      color: white;
+      font-size: 1.2rem;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1.5rem;
+    }
+    .results-table tr {
+      border-bottom: 1px solid var(--border);
+    }
+    .results-table td {
+      padding: 0.8rem 0;
+    }
+    .results-table td:last-child {
+      text-align: right;
+      font-weight: bold;
+    }
+    .row-highlight {
+      background: #064e3b;
+    }
+    .row-highlight td {
+      padding: 1rem !important;
+      color: #34d399;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="index.html" class="logo">BGПерли 🌲</a>
+    <nav>
+      <a href="index.html">Дестинации</a>
+      <a href="salary.html" class="active">Калкулатор Заплата</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="card">
+      <h2>Калкулатор Заплата (От Бруто към Чисто)</h2>
+      
+      <div class="form-group">
+        <label>Брутна заплата (лв.):</label>
+        <input type="number" id="salaryAmount" value="2000" oninput="calculateSalary()">
+      </div>
+
+      <table class="results-table">
+        <tr>
+          <td>Брутна сума</td>
+          <td id="resGross">0.00 лв.</td>
+        </tr>
+        <tr>
+          <td>Лични осигуровки (13.78%)</td>
+          <td id="resInsurances" style="color: #f87171;">-0.00 лв.</td>
+        </tr>
+        <tr>
+          <td>Данък общ доход (10%)</td>
+          <td id="resTax" style="color: #f87171;">-0.00 лв.</td>
+        </tr>
+        <tr class="row-highlight">
+          <td><strong>Чиста сума за получаване (Нето)</strong></td>
+          <td id="resNet"><strong>0.00 лв.</strong></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    function calculateSalary() {
+      const gross = parseFloat(document.getElementById('salaryAmount').value) || 0;
+      const insurableBase = Math.min(gross, 3750);
+      const employeeInsurance = insurableBase * 0.1378;
+      const taxableBase = gross - employeeInsurance;
+      const tax = Math.max(0, taxableBase * 0.10);
+      const net = gross - employeeInsurance - tax;
+
+      document.getElementById('resGross').innerText = gross.toFixed(2) + ' лв.';
+      document.getElementById('resInsurances').innerText = '- ' + employeeInsurance.toFixed(2) + ' лв.';
+      document.getElementById('resTax').innerText = '- ' + tax.toFixed(2) + ' лв.';
+      document.getElementById('resNet').innerHTML = '<strong>' + net.toFixed(2) + ' лв.</strong>';
+    }
+    calculateSalary();
+  </script>
+</body>
+</html>
