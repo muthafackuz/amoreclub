@@ -121,12 +121,33 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+    }
+    .card-img-wrapper {
+      position: relative;
+      cursor: pointer;
     }
     .destination-img {
       width: 100%;
-      height: 220px;
+      height: 200px;
       object-fit: cover;
       background-color: #020617;
+      display: block;
+    }
+    .view-more-badge {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: rgba(0,0,0,0.75);
+      color: #fff;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      backdrop-filter: blur(4px);
     }
     .card-body {
       padding: 1.2rem;
@@ -148,6 +169,10 @@
     .card-title {
       margin: 0 0 0.3rem 0;
       font-size: 1.25rem;
+      cursor: pointer;
+    }
+    .card-title:hover {
+      color: var(--accent);
     }
     .card-location {
       color: var(--text-muted);
@@ -162,36 +187,66 @@
       flex: 1;
     }
 
-    /* Мини калкулатор */
+    /* Калкулатор с ръчни километри */
     .mini-calc {
       background: #020617;
       border: 1px solid var(--border);
       padding: 0.8rem;
-      border-radius: 6px;
+      border-radius: 8px;
       font-size: 0.85rem;
     }
-    .mini-calc input {
-      width: 60px;
-      padding: 0.2rem;
+    .calc-inputs {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+    .calc-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      flex: 1;
+    }
+    .calc-field label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .calc-field input {
+      width: 100%;
+      padding: 0.4rem;
       background: #1e293b;
       border: 1px solid #475569;
       color: white;
       border-radius: 4px;
       text-align: center;
-    }
-    .calc-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.4rem;
+      font-weight: bold;
+      box-sizing: border-box;
     }
     .calc-result {
       font-weight: bold;
       color: var(--accent);
       text-align: center;
-      margin-top: 0.5rem;
+      margin-top: 0.4rem;
       border-top: 1px solid var(--border);
       padding-top: 0.4rem;
+    }
+
+    /* Бутон за Модал */
+    .details-btn {
+      width: 100%;
+      margin-top: 0.8rem;
+      padding: 0.5rem;
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s, color 0.2s;
+    }
+    .details-btn:hover {
+      background: var(--accent);
+      color: #000;
     }
 
     /* Пагинация */
@@ -225,6 +280,104 @@
     .page-btn:disabled {
       opacity: 0.4;
       cursor: not-allowed;
+    }
+
+    /* Pop-up (Modal) Стилове */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      padding: 1rem;
+      box-sizing: border-box;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-content {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      max-width: 700px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      padding: 1.5rem;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+    }
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: #020617;
+      border: 1px solid var(--border);
+      color: white;
+      font-size: 1.2rem;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .gallery-container {
+      position: relative;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #020617;
+    }
+    .gallery-img {
+      width: 100%;
+      height: 350px;
+      object-fit: cover;
+      display: block;
+    }
+    .gallery-nav {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+      padding: 0 0.5rem;
+      box-sizing: border-box;
+    }
+    .gallery-btn {
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--border);
+      color: white;
+      padding: 0.5rem 0.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      backdrop-filter: blur(4px);
+    }
+    .gallery-btn:hover {
+      background: var(--accent);
+      color: #000;
+    }
+    .gallery-counter {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.7);
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
     }
 
     .no-results {
@@ -274,120 +427,176 @@
 
   </div>
 
+  <!-- Pop-up (Модален прозорец) за детайли и галерия -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      
+      <div class="gallery-container">
+        <img id="modalImg" src="" class="gallery-img" alt="Дестинация">
+        <div class="gallery-nav">
+          <button class="gallery-btn" onclick="prevImage()">❮</button>
+          <button class="gallery-btn" onclick="nextImage()">❯</button>
+        </div>
+        <div class="gallery-counter" id="galleryCounter">1 / 3</div>
+      </div>
+
+      <span class="category-badge" id="modalCategory">Категория</span>
+      <h2 id="modalTitle" style="margin: 0.5rem 0 0.2rem 0;">Заглавие</h2>
+      <div id="modalLocation" class="card-location">📍 Локация</div>
+      <p id="modalDesc" style="line-height: 1.5; color: #cbd5e1;"></p>
+
+      <div class="mini-calc" style="margin-top: 1rem;">
+        <div class="calc-inputs">
+          <div class="calc-field">
+            <label>КМ (двупосочно):</label>
+            <input type="number" id="modalKm" value="200" min="1" oninput="updateModalCost()">
+          </div>
+          <div class="calc-field">
+            <label>Брой хора:</label>
+            <input type="number" id="modalPeople" value="3" min="1" oninput="updateModalCost()">
+          </div>
+        </div>
+        <div class="calc-result" id="modalCost"> Изчисляване... </div>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // Масив с български забележителности
+    // Резервно изображение при проблем със зареждането
+    const FALLBACK_IMG = "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80";
+
+    // Списък със забележителности и галерии от снимки
     const placesData = [
-      // МАНАСТИРИ & ИСТОРИЯ
-      { title: "Рилски Манастир", location: "Рила планина", category: "history", km: 240, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Rila_Monastery_Bulgaria_Main_Courtyard.jpg/800px-Rila_Monastery_Bulgaria_Main_Courtyard.jpg", desc: "Най-големият манастир в България, основан през X век от св. Иван Рилски." },
-      { title: "Белоградчишки скали & Крепост", location: "Белоградчик", category: "history", km: 430, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Belogradchik_Rocks_2019.jpg/800px-Belogradchik_Rocks_2019.jpg", desc: "Уникални природни скални фигури и антична крепост с хилядолетна история." },
-      { title: "Царевец", location: "Велико Търново", category: "history", km: 440, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Tsarevets_Veliko_Tarnovo.jpg/800px-Tsarevets_Veliko_Tarnovo.jpg", desc: "Непревземаемата средновековна крепост, столица на Второто българско царство." },
-      { title: "Дяволски мост", location: "Ардино • Родопи", category: "history", km: 520, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Dyavolski_most_Ardino_01.jpg/800px-Dyavolski_most_Ardino_01.jpg", desc: "Мистичен мост от XVI век над река Арда с легенда за отпечатък от Дявола." },
-      { title: "Бачковски манастир", location: "Бачково • Родопи", category: "history", km: 380, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Bachkovo_Monastery_2010_PD_01.jpg/800px-Bachkovo_Monastery_2010_PD_01.jpg", desc: "Вторият по големина български манастир, известен с чудотворната икона на Богородица." },
-      { title: "Крепост Баба Вида", location: "Видин", category: "history", km: 400, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Baba_Vida_Castle.jpg/800px-Baba_Vida_Castle.jpg", desc: "Единствената изцяло запазена средновековна феодална крепост в България." },
-      { title: "Античен театър", location: "Пловдив", category: "history", km: 300, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Plovdiv_Ancient_Theatre.jpg/800px-Plovdiv_Ancient_Theatre.jpg", desc: "Добре запазен римски театър в центъра на Пловдив, функциониращ и днес." },
-      { title: "Перперикон", location: "Кърджали • Родопи", category: "history", km: 480, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Perperikon_Bulgaria.jpg/800px-Perperikon_Bulgaria.jpg", desc: "Древен скален град на траките, едно от най-големите светилища в древността." },
-      { title: "Троянски манастир", location: "Троян", category: "history", km: 320, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Troyan_monastery.jpg/800px-Troyan_monastery.jpg", desc: "Третият по големина манастир, съхраняващ чудотворната икона Пресвятая Богородица Троеручица." },
-      { title: "Паметник Шипка", location: "Връх Шипка", category: "history", km: 350, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Shipka_Pass_Memorial.jpg/800px-Shipka_Pass_Memorial.jpg", desc: "Паметник на свободата, посветен на героичните боеве от Освободителната война." },
-      { title: "Мадарски конник", location: "Мадара • Шумен", category: "history", km: 220, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Madara_Rider_Bulgaria.jpg/800px-Madara_Rider_Bulgaria.jpg", desc: "Уникален скален релеф от ранното средновековие, включен в списъка на ЮНЕСКО." },
-      { title: "Асенова крепост", location: "Асеновград", category: "history", km: 360, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Asen's_Fortress_2.jpg/800px-Asen's_Fortress_2.jpg", desc: "Символ на Родопите със запазената църква 'Св. Богородица Петричка'." },
-
-      // ВОДОПАДИ
-      { title: "Водопад Райско пръскало", location: "Връх Ботев • Стара планина", category: "waterfall", km: 390, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Raysko_Praskalo.jpg/800px-Raysko_Praskalo.jpg", desc: "Най-високият водопад на Балканите (124.5 м), спускащ се под връх Ботев." },
-      { title: "Крушунски водопади", location: "с. Крушуна • Летница", category: "waterfall", km: 310, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Krushuna_Waterfalls_1.jpg/800px-Krushuna_Waterfalls_1.jpg", desc: "Живописна водна каскада с тюркоазено сини басейни и бигорни скали." },
-      { title: "Вазовска екопътека & Скакля", location: "Искърско дефиле", category: "waterfall", km: 120, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Skaklya_Waterfall.jpg/800px-Skaklya_Waterfall.jpg", desc: "Красив преход, вдъхновил Иван Вазов, извеждащ до висок водопад." },
-      { title: "Водопад Костенец", location: "Костенец", category: "waterfall", km: 160, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Kostenets_waterfall.jpg/800px-Kostenets_waterfall.jpg", desc: "Лесно достъпен водопад в Рила, описан още от Вазов в 'Пътеписи'." },
-      { title: "Водопад Кадемлийско пръскало", location: "Централен Балкан", category: "waterfall", km: 330, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Kademliysko_praskalo.jpg/800px-Kademliysko_praskalo.jpg", desc: "Мощен 70-метров водопад в подножието на връх Триглав." },
-      { title: "Водопад Сучурум", location: "Карлово", category: "waterfall", km: 280, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Karlovo_waterfall_Suchurum.jpg/800px-Karlovo_waterfall_Suchurum.jpg", desc: "Градски водопад на Стара река, разположен в непосредствена близост до Карлово." },
-      { title: "Етрополски водопад Варовитец", location: "Етрополе", category: "waterfall", km: 190, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Varovitetz.jpg/800px-Varovitetz.jpg", desc: "Приказен водопад в близост до Етрополския манастир." },
-
-      // ПЕЩЕРИ
-      { title: "Пещера Проходна (Очите на Бога)", location: "Карлуково", category: "cave", km: 230, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Prohodna_Cave_Eyes_of_God.jpg/800px-Prohodna_Cave_Eyes_of_God.jpg", desc: "Естествено осветена пещера с два огромни прозореца, напомнящи очи." },
-      { title: "Дяволското гърло", location: "Триград • Родопи", category: "cave", km: 490, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Devil's_Throat_Cave.jpg/800px-Devil's_Throat_Cave.jpg", desc: "Страховита пещера с най-високия подземен водопад на Балканите (42 м)." },
-      { title: "Ягодинска пещера", location: "Буйново • Родопи", category: "cave", km: 500, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Jagodinska_cave.jpg/800px-Jagodinska_cave.jpg", desc: "Подземен свят с над 10 км галерии и уникални пещерни бисери." },
-      { title: "Пещера Леденика", location: "Врачански Балкан", category: "cave", km: 220, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Ledenika_cave_Bulgaria.jpg/800px-Ledenika_cave_Bulgaria.jpg", desc: "Известна с ледените си образувания през зимата и Концертната зала." },
-      { title: "Пещера Магурата", location: "с. Рабиша • Видин", category: "cave", km: 460, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Magura_Cave_Paintings.jpg/800px-Magura_Cave_Paintings.jpg", desc: "Известна със праисторическите рисунки от прилепово гуано на хиляди години." },
-      { title: "Пещера Деветашка", location: "Деветаки • Ловеч", category: "cave", km: 280, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Devetashka_cave_inside.jpg/800px-Devetashka_cave_inside.jpg", desc: "Огромна пещера с 7 отвора на тавана, обитавана от хиляди прилепи." },
-      { title: "Пещера Съева дупка", location: "с. Брестница", category: "cave", km: 210, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Saeva_dupka_cave.jpg/800px-Saeva_dupka_cave.jpg", desc: "Наричана 'подземната перла' заради изключителните си оцветени сталактити." },
-
-      // ПЛАНИНИ & ВЪРХОВЕ
-      { title: "Връх Мусала", location: "Рила (2925 м)", category: "mountain", km: 210, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Musala_peak.jpg/800px-Musala_peak.jpg", desc: "Най-високият връх в България и на целия Балкански полуостров." },
-      { title: "Връх Вихрен", location: "Пирин (2914 м)", category: "mountain", km: 380, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Vihren_Pirin.jpg/800px-Vihren_Pirin.jpg", desc: "Мраморен първенец на Пирин, заобиколен от редкия еделвайс." },
-      { title: "Връх Ботев", location: "Стара планина (2376 м)", category: "mountain", km: 350, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Botev_peak.jpg/800px-Botev_peak.jpg", desc: "Най-високият връх в Стара планина с метеорологична станция отгоре." },
-      { title: "Връх Черни връх", location: "Витоша (2290 м)", category: "mountain", km: 110, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Cherni_Vrah_Vitosha.jpg/800px-Cherni_Vrah_Vitosha.jpg", desc: "Любимо място за разходка на софиянци, поставило началото на организирания туризъм." },
-      { title: "Белинташ", location: "Родопи", category: "mountain", km: 410, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Belintash_Rhodopes.jpg/800px-Belintash_Rhodopes.jpg", desc: "Древно тракийско светилище на култова скала с невероятна гледка." },
-      { title: "Чудните мостове", location: "Забърдо • Родопи", category: "mountain", km: 440, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Wonderful_Bridges.jpg/800px-Wonderful_Bridges.jpg", desc: "Огромни естествени скални арки, образувани от древна пещера." },
-
-      // ЕЗЕРА & МОРЕ
-      { title: "Седемте Рила Езера", location: "Рила планина", category: "sea", km: 190, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Seven_Rila_Lakes_panorama.jpg/800px-Seven_Rila_Lakes_panorama.jpg", desc: "Сълзата, Окото, Бъбрека, Близнака, Трилистника, Рибното и Долното езеро." },
-      { title: "Архитектурен комплекс Несебър", location: "Несебър • Черно море", category: "sea", km: 130, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Nesebar_Ancient_Town.jpg/800px-Nesebar_Ancient_Town.jpg", desc: "Древен град-музей на полувисoк остров с богата история и църкви." },
-      { title: "Замъкът 'Влюбен във вятъра'", location: "Равадиново • Созопол", category: "sea", km: 120, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Ravadinovo_Castle.jpg/800px-Ravadinovo_Castle.jpg", desc: "Атрактивен приказен замък с красиви градини и езера." },
-      { title: "Нос Калиакра", location: "Каварна", category: "sea", km: 260, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Cape_Kaliakra.jpg/800px-Cape_Kaliakra.jpg", desc: "Живописен нос с отвесни червени скали, врязващ се 2 км навътре в морето." },
-      { title: "Побити камъни", location: "Варна", category: "sea", km: 200, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Pobiti_Kamani_Varna.jpg/800px-Pobiti_Kamani_Varna.jpg", desc: "Уникална каменна пустиня от кухи колони, формирана преди милиони години." }
+      {
+        id: 1,
+        title: "Рилски Манастир",
+        location: "Рила планина",
+        category: "history",
+        km: 240,
+        images: [
+          "https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80"
+        ],
+        desc: "Най-големият и известен православен манастир в България, основан през X век от св. Иван Рилски. Включен в списъка на ЮНЕСКО."
+      },
+      {
+        id: 2,
+        title: "Белоградчишки скали & Крепост",
+        location: "Белоградчик",
+        category: "history",
+        km: 430,
+        images: [
+          "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80"
+        ],
+        desc: "Уникални природни скални фигури, формирани в продължение на 200 милиона години, комбинирани с антична и средновековна крепост."
+      },
+      {
+        id: 3,
+        title: "Царевец",
+        location: "Велико Търново",
+        category: "history",
+        km: 440,
+        images: [
+          "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80"
+        ],
+        desc: "Непревземаемата крепост на Второто българско царство с Патриаршеската катедрала и кулата на Балдуин."
+      },
+      {
+        id: 4,
+        title: "Седемте Рила Езера",
+        location: "Рила планина",
+        category: "sea",
+        km: 190,
+        images: [
+          "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=800&q=80"
+        ],
+        desc: "Група езера с ледников произход в Рила: Сълзата, Окото, Бъбрека, Близнака, Трилистника, Рибното и Долното езеро."
+      },
+      {
+        id: 5,
+        title: "Крушунски водопади",
+        location: "с. Крушуна • Летница",
+        category: "waterfall",
+        km: 310,
+        images: [
+          "https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800&q=80"
+        ],
+        desc: "Приказна водна каскада от естествени бигорни прагове с екзотични тюркоазено сини басейни."
+      },
+      {
+        id: 6,
+        title: "Пещера Проходна (Очите на Бога)",
+        location: "Карлуково",
+        category: "cave",
+        km: 230,
+        images: [
+          "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1509114397022-ed747cca3f65?auto=format&fit=crop&w=800&q=80"
+        ],
+        desc: "Една от най-известните пещери в България с два естествени скални отвора в тавана, наподобяващи човешки очи."
+      }
     ];
 
-    // Допълнителни 90+ места
+    // Допълнителни дестинации
     function generateExtraPlaces() {
-      const extraPlaces = [];
-      const regions = ["Родопи", "Стара планина", "Пирин", "Рила", "Средна гора", "Черноморие", "Добруджа", "Витоша"];
-      const catList = ["waterfall", "cave", "history", "mountain", "sea"];
-      
-      const names = [
-        "Екопътека Невястата", "Каньон на водопадите", "Язовир Доспат", "Язовир Широка поляна",
-        "Мелнишки пирамиди", "Крепост Лютица", "Пещера Утробата", "Скалният манастир Аладжа",
-        "Ивановски скални църкви", "Парк Етър", "Плиска", "Преслав", "Град Мелник", "Резово",
-        "Синеморец и Велека", "Белоградчишки манастир", "Гложенски манастир", "Черепишки манастир",
-        "Пещера Орлова чука", "Пещера Бачо Киро", "Водопад Кая Бунар", "Къпиновски водопад",
-        "Екопътека Струилница", "Крепост Мезек", "Тракийска гробница Казанлък", "Гробница Свещари",
-        "Връх Руен", "Връх Ком", "Връх Мальовица", "Урдини езера", "Попово езеро", "Сини камъни Сливен",
-        "Карандила", "Жребчево и потопената църква", "Каменните гъби", "Скали Враттата", "Каньон Емен",
-        "Хотнишка екопътека", "Двореца Балчик", "Ботаническа градина Балчик", "Остров Света Анастасия",
-        "Белославско езеро", "Шабленски фар", "Дуранкулашко езеро", "Аркутино", "Бегликташ",
-        "Заповедник Ропотамо", "Крепост Устра", "Крепост Моняк", "Връх Снежанка", "Орлово око",
-        "Вълчи камък", "Триградско ждрело", "Буйновско ждрело", "Златоград - стария град",
-        "Перущица", "Клисура", "Копривщица", "Панагюрище", "Свещарска гробница", "Деветашка пещера",
-        "Крепост Хоталич", "Цари Мали град", "Плиска - Голямата базилика", "Манастир Седемте престола",
-        "Водопад Сухата река", "Скалните прозорци", "Стобски пирамиди", "Кресненско ждрело",
-        "Пирински езера", "Екопътека Бордо", "Водопад Боров камък", "Пещера Моровица", "Пещера Извора"
+      const extra = [];
+      const titles = [
+        "Дяволски мост", "Бачковски манастир", "Античен театър Пловдив", "Перперикон", "Връх Мусала",
+        "Връх Вихрен", "Дяволското гърло", "Ягодинска пещера", "Пещера Деветашка", "Замъкът Равадиново",
+        "Нос Калиакра", "Побити камъни", "Връх Ботев", "Чудните мостове", "Водопад Райско пръскало"
       ];
+      const cats = ["history", "mountain", "cave", "sea", "waterfall"];
 
-      for (let i = 0; i < names.length; i++) {
-        const cat = catList[i % catList.length];
-        const reg = regions[i % regions.length];
-        extraPlaces.push({
-          title: names[i],
-          location: `${reg}`,
-          category: cat,
-          km: Math.floor(Math.random() * 400) + 50,
-          img: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
-          desc: `Изключителна дестинация в региона на ${reg}. Перфектно място за уикенд разходка и фотосесии.`
+      titles.forEach((t, i) => {
+        extra.push({
+          id: i + 10,
+          title: t,
+          location: "България",
+          category: cats[i % cats.length],
+          km: 150 + (i * 20),
+          images: [
+            "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+            "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80"
+          ],
+          desc: `Красива дестинация (${t}), предлагаща уникални природни гледки и богати възможности за туризъм.`
         });
-      }
-      return extraPlaces;
+      });
+      return extra;
     }
 
     const allPlaces = [...placesData, ...generateExtraPlaces()];
 
-    // ПАГИНАЦИЯ ПРОМЕНЛИВИ
+    // Променливи за състоянието
     let currentPage = 1;
-    const itemsPerPage = 6; // По 6 на страница!
+    const itemsPerPage = 6;
     let currentFilteredList = [...allPlaces];
+    
+    // Модал променливи
+    let activeModalPlace = null;
+    let currentImgIndex = 0;
 
-    // Рендериране на картите за текущата страница
+    // Рендериране на страниците
     function renderCurrentPage() {
       const container = document.getElementById('placesContainer');
       container.innerHTML = '';
 
       if (currentFilteredList.length === 0) {
-        container.innerHTML = `<div class="no-results">❌ Няма намерени дестинации по вашите критерии.</div>`;
+        container.innerHTML = `<div class="no-results">❌ Няма намерени дестинации.</div>`;
         document.getElementById('paginationContainer').innerHTML = '';
         return;
       }
 
       const startIndex = (currentPage - 1) * itemsPerPage;
-      const endIndex = startIndex + itemsPerPage;
-      const pageItems = currentFilteredList.slice(startIndex, endIndex);
+      const pageItems = currentFilteredList.slice(startIndex, startIndex + itemsPerPage);
 
-      pageItems.forEach((place, index) => {
+      pageItems.forEach((place, pageIndex) => {
+        const globalIndex = startIndex + pageIndex;
         const card = document.createElement('div');
         card.className = 'card';
 
@@ -398,31 +607,64 @@
         if(place.category === "mountain") catText = "⛰️ Планина";
         if(place.category === "sea") catText = "🌊 Море & Езеро";
 
+        const mainImg = place.images && place.images[0] ? place.images[0] : FALLBACK_IMG;
+
         card.innerHTML = `
-          <img src="${place.img}" alt="${place.title}" class="destination-img" onerror="this.src='https://via.placeholder.com/800x500?text=${encodeURIComponent(place.title)}'">
+          <div class="card-img-wrapper" onclick="openModal(${globalIndex})">
+            <img src="${mainImg}" alt="${place.title}" class="destination-img" onerror="this.src='${FALLBACK_IMG}'">
+            <span class="view-more-badge">🖼️ Галерия (${place.images.length})</span>
+          </div>
           <div class="card-body">
             <span class="category-badge">${catText}</span>
-            <h3 class="card-title">${place.title}</h3>
+            <h3 class="card-title" onclick="openModal(${globalIndex})">${place.title}</h3>
             <div class="card-location">📍 ${place.location}</div>
             <div class="card-desc">${place.desc}</div>
             
             <div class="mini-calc">
-              <div class="calc-row">
-                <span>Двупосочно: <strong>${place.km} км</strong></span>
-                <span>Хора: <input type="number" id="people_${index}" value="3" min="1" oninput="updateCardCost(${index}, ${place.km})"></span>
+              <div class="calc-inputs">
+                <div class="calc-field">
+                  <label>КМ (двупосочно):</label>
+                  <input type="number" id="km_input_${globalIndex}" value="${place.km}" min="1" oninput="updateCardCost(${globalIndex})">
+                </div>
+                <div class="calc-field">
+                  <label>Хора:</label>
+                  <input type="number" id="people_input_${globalIndex}" value="3" min="1" oninput="updateCardCost(${globalIndex})">
+                </div>
               </div>
-              <div class="calc-result" id="cost_${index}"> Loading... </div>
+              <div class="calc-result" id="cost_result_${globalIndex}">0.00 лв.</div>
             </div>
+
+            <button class="details-btn" onclick="openModal(${globalIndex})">🔍 Виж повече & Снимки</button>
           </div>
         `;
         container.appendChild(card);
-        updateCardCost(index, place.km);
+        updateCardCost(globalIndex);
       });
 
       renderPaginationControls();
     }
 
-    // Изчертаване на бутоните за страници
+    // Калкулация на цена по карти
+    function updateCardCost(globalIndex) {
+      const kmInput = document.getElementById(`km_input_${globalIndex}`);
+      const peopleInput = document.getElementById(`people_input_${globalIndex}`);
+      const resultDiv = document.getElementById(`cost_result_${globalIndex}`);
+
+      if (!kmInput || !peopleInput || !resultDiv) return;
+
+      const km = parseFloat(kmInput.value) || 0;
+      const people = parseInt(peopleInput.value) || 1;
+
+      const consumption = 7.0; // 7 литра на 100 км
+      const fuelPrice = 2.65;  // 2.65 лв./литър
+
+      const totalCost = (km / 100) * consumption * fuelPrice;
+      const costPerPerson = totalCost / people;
+
+      resultDiv.innerHTML = `Общо: <strong>${totalCost.toFixed(2)} лв.</strong> (${costPerPerson.toFixed(2)} лв./човек)`;
+    }
+
+    // Бутони за страници
     function renderPaginationControls() {
       const container = document.getElementById('paginationContainer');
       container.innerHTML = '';
@@ -430,7 +672,6 @@
       const totalPages = Math.ceil(currentFilteredList.length / itemsPerPage);
       if (totalPages <= 1) return;
 
-      // Бутон "Предишна"
       const prevBtn = document.createElement('button');
       prevBtn.className = 'page-btn';
       prevBtn.innerText = '← Предишна';
@@ -439,12 +680,11 @@
         if (currentPage > 1) {
           currentPage--;
           renderCurrentPage();
-          window.scrollTo({ top: 300, behavior: 'smooth' });
+          window.scrollTo({ top: 250, behavior: 'smooth' });
         }
       };
       container.appendChild(prevBtn);
 
-      // Номера на страници
       for (let i = 1; i <= totalPages; i++) {
         const pageBtn = document.createElement('button');
         pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
@@ -452,12 +692,11 @@
         pageBtn.onclick = () => {
           currentPage = i;
           renderCurrentPage();
-          window.scrollTo({ top: 300, behavior: 'smooth' });
+          window.scrollTo({ top: 250, behavior: 'smooth' });
         };
         container.appendChild(pageBtn);
       }
 
-      // Бутон "Следваща"
       const nextBtn = document.createElement('button');
       nextBtn.className = 'page-btn';
       nextBtn.innerText = 'Следваща →';
@@ -466,29 +705,13 @@
         if (currentPage < totalPages) {
           currentPage++;
           renderCurrentPage();
-          window.scrollTo({ top: 300, behavior: 'smooth' });
+          window.scrollTo({ top: 250, behavior: 'smooth' });
         }
       };
       container.appendChild(nextBtn);
     }
 
-    // Калкулатор за разход на всяка карта
-    function updateCardCost(index, km) {
-      const peopleInput = document.getElementById(`people_${index}`);
-      const costDiv = document.getElementById(`cost_${index}`);
-      
-      const people = parseInt(peopleInput.value) || 1;
-      const consumption = 7.0; // 7L / 100km
-      const price = 2.65; // 2.65 лв / л
-
-      const totalLiters = (km / 100) * consumption;
-      const totalCost = totalLiters * price;
-      const costPerPerson = totalCost / people;
-
-      costDiv.innerHTML = `Общо: <strong>${totalCost.toFixed(2)} лв.</strong> (${costPerPerson.toFixed(2)} лв./човек)`;
-    }
-
-    // Събитие при промяна на търсачката или категорията
+    // Филтриране
     function onFilterChange() {
       const search = document.getElementById('searchInput').value.toLowerCase();
       const category = document.getElementById('categoryFilter').value;
@@ -499,20 +722,82 @@
         return matchesSearch && matchesCat;
       });
 
-      currentPage = 1; // Нулираме до Страница 1
+      currentPage = 1;
       renderCurrentPage();
     }
 
     // Случаен избор
     function pickRandom() {
       if(currentFilteredList.length === 0) return;
-
       const randomIndex = Math.floor(Math.random() * currentFilteredList.length);
-      currentPage = Math.floor(randomIndex / itemsPerPage) + 1;
-      
-      renderCurrentPage();
-      window.scrollTo({ top: 300, behavior: 'smooth' });
+      openModal(randomIndex);
     }
+
+    // --- POP-UP (MODAL) И ГАЛЕРИЯ ---
+    function openModal(globalIndex) {
+      activeModalPlace = currentFilteredList[globalIndex];
+      if (!activeModalPlace) return;
+
+      currentImgIndex = 0;
+      
+      document.getElementById('modalTitle').innerText = activeModalPlace.title;
+      document.getElementById('modalLocation').innerText = `📍 ${activeModalPlace.location}`;
+      document.getElementById('modalDesc').innerText = activeModalPlace.desc;
+      document.getElementById('modalCategory').innerText = activeModalPlace.category.toUpperCase();
+      
+      // Поставяме километрите
+      const cardKmInput = document.getElementById(`km_input_${globalIndex}`);
+      const currentKm = cardKmInput ? cardKmInput.value : activeModalPlace.km;
+      document.getElementById('modalKm').value = currentKm;
+
+      updateModalImage();
+      updateModalCost();
+
+      document.getElementById('modalOverlay').classList.add('open');
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('open');
+    }
+
+    function updateModalImage() {
+      if (!activeModalPlace || !activeModalPlace.images.length) return;
+      const imgElem = document.getElementById('modalImg');
+      imgElem.src = activeModalPlace.images[currentImgIndex];
+      imgElem.onerror = () => { imgElem.src = FALLBACK_IMG; };
+
+      document.getElementById('galleryCounter').innerText = `${currentImgIndex + 1} / ${activeModalPlace.images.length}`;
+    }
+
+    function nextImage() {
+      if (!activeModalPlace) return;
+      currentImgIndex = (currentImgIndex + 1) % activeModalPlace.images.length;
+      updateModalImage();
+    }
+
+    function prevImage() {
+      if (!activeModalPlace) return;
+      currentImgIndex = (currentImgIndex - 1 + activeModalPlace.images.length) % activeModalPlace.images.length;
+      updateModalImage();
+    }
+
+    function updateModalCost() {
+      const km = parseFloat(document.getElementById('modalKm').value) || 0;
+      const people = parseInt(document.getElementById('modalPeople').value) || 1;
+
+      const totalCost = (km / 100) * 7.0 * 2.65;
+      const costPerPerson = totalCost / people;
+
+      document.getElementById('modalCost').innerHTML = `Общо: <strong>${totalCost.toFixed(2)} лв.</strong> (${costPerPerson.toFixed(2)} лв./човек)`;
+    }
+
+    // Затваряне при клик извън съдържанието
+    window.onclick = function(event) {
+      const modal = document.getElementById('modalOverlay');
+      if (event.target === modal) {
+        closeModal();
+      }
+    };
 
     // Първоначално зареждане
     renderCurrentPage();
