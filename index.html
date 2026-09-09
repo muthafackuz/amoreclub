@@ -112,6 +112,7 @@
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
       gap: 1.5rem;
+      min-height: 400px;
     }
     .card {
       background: var(--card-bg);
@@ -161,7 +162,7 @@
       flex: 1;
     }
 
-    /* Мини калкулатор вътре в картата */
+    /* Мини калкулатор */
     .mini-calc {
       background: #020617;
       border: 1px solid var(--border);
@@ -192,6 +193,40 @@
       border-top: 1px solid var(--border);
       padding-top: 0.4rem;
     }
+
+    /* Пагинация */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 2.5rem 0;
+      flex-wrap: wrap;
+    }
+    .page-btn {
+      padding: 0.5rem 1rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .page-btn:hover {
+      background: var(--border);
+    }
+    .page-btn.active {
+      background: var(--accent);
+      color: #000;
+      font-weight: bold;
+      border-color: var(--accent);
+    }
+    .page-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
     .no-results {
       grid-column: 1 / -1;
       text-align: center;
@@ -216,10 +251,10 @@
     <!-- Филтри и Търсачка -->
     <div class="controls">
       <div class="search-box">
-        <input type="text" id="searchInput" placeholder="🔍 Търси дестинация или градове..." oninput="filterPlaces()">
+        <input type="text" id="searchInput" placeholder="🔍 Търси дестинация или градове..." oninput="onFilterChange()">
       </div>
       <div class="filter-box">
-        <select id="categoryFilter" onchange="filterPlaces()">
+        <select id="categoryFilter" onchange="onFilterChange()">
           <option value="all">Всички категории</option>
           <option value="waterfall">Водопади</option>
           <option value="cave">Пещери</option>
@@ -234,10 +269,13 @@
     <!-- Мрежа от дестинации -->
     <div class="places-grid" id="placesContainer"></div>
 
+    <!-- Страници / Пагинация -->
+    <div class="pagination" id="paginationContainer"></div>
+
   </div>
 
   <script>
-    // Масив със над 120 български забележителности
+    // Масив с български забележителности
     const placesData = [
       // МАНАСТИРИ & ИСТОРИЯ
       { title: "Рилски Манастир", location: "Рила планина", category: "history", km: 240, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Rila_Monastery_Bulgaria_Main_Courtyard.jpg/800px-Rila_Monastery_Bulgaria_Main_Courtyard.jpg", desc: "Най-големият манастир в България, основан през X век от св. Иван Рилски." },
@@ -287,7 +325,7 @@
       { title: "Побити камъни", location: "Варна", category: "sea", km: 200, img: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Pobiti_Kamani_Varna.jpg/800px-Pobiti_Kamani_Varna.jpg", desc: "Уникална каменна пустиня от кухи колони, формирана преди милиони години." }
     ];
 
-    // Функция за генерация на допълнителни 90+ популярни дестинации, за да станат над 120!
+    // Допълнителни 90+ места
     function generateExtraPlaces() {
       const extraPlaces = [];
       const regions = ["Родопи", "Стара планина", "Пирин", "Рила", "Средна гора", "Черноморие", "Добруджа", "Витоша"];
@@ -329,17 +367,27 @@
 
     const allPlaces = [...placesData, ...generateExtraPlaces()];
 
-    // Рендериране на картите
-    function renderPlaces(list) {
+    // ПАГИНАЦИЯ ПРОМЕНЛИВИ
+    let currentPage = 1;
+    const itemsPerPage = 6; // По 6 на страница!
+    let currentFilteredList = [...allPlaces];
+
+    // Рендериране на картите за текущата страница
+    function renderCurrentPage() {
       const container = document.getElementById('placesContainer');
       container.innerHTML = '';
 
-      if (list.length === 0) {
+      if (currentFilteredList.length === 0) {
         container.innerHTML = `<div class="no-results">❌ Няма намерени дестинации по вашите критерии.</div>`;
+        document.getElementById('paginationContainer').innerHTML = '';
         return;
       }
 
-      list.forEach((place, index) => {
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      const pageItems = currentFilteredList.slice(startIndex, endIndex);
+
+      pageItems.forEach((place, index) => {
         const card = document.createElement('div');
         card.className = 'card';
 
@@ -370,6 +418,58 @@
         container.appendChild(card);
         updateCardCost(index, place.km);
       });
+
+      renderPaginationControls();
+    }
+
+    // Изчертаване на бутоните за страници
+    function renderPaginationControls() {
+      const container = document.getElementById('paginationContainer');
+      container.innerHTML = '';
+
+      const totalPages = Math.ceil(currentFilteredList.length / itemsPerPage);
+      if (totalPages <= 1) return;
+
+      // Бутон "Предишна"
+      const prevBtn = document.createElement('button');
+      prevBtn.className = 'page-btn';
+      prevBtn.innerText = '← Предишна';
+      prevBtn.disabled = currentPage === 1;
+      prevBtn.onclick = () => {
+        if (currentPage > 1) {
+          currentPage--;
+          renderCurrentPage();
+          window.scrollTo({ top: 300, behavior: 'smooth' });
+        }
+      };
+      container.appendChild(prevBtn);
+
+      // Номера на страници
+      for (let i = 1; i <= totalPages; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+        pageBtn.innerText = i;
+        pageBtn.onclick = () => {
+          currentPage = i;
+          renderCurrentPage();
+          window.scrollTo({ top: 300, behavior: 'smooth' });
+        };
+        container.appendChild(pageBtn);
+      }
+
+      // Бутон "Следваща"
+      const nextBtn = document.createElement('button');
+      nextBtn.className = 'page-btn';
+      nextBtn.innerText = 'Следваща →';
+      nextBtn.disabled = currentPage === totalPages;
+      nextBtn.onclick = () => {
+        if (currentPage < totalPages) {
+          currentPage++;
+          renderCurrentPage();
+          window.scrollTo({ top: 300, behavior: 'smooth' });
+        }
+      };
+      container.appendChild(nextBtn);
     }
 
     // Калкулатор за разход на всяка карта
@@ -378,8 +478,8 @@
       const costDiv = document.getElementById(`cost_${index}`);
       
       const people = parseInt(peopleInput.value) || 1;
-      const consumption = 7.0; // average 7L / 100km
-      const price = 2.65; // average fuel price
+      const consumption = 7.0; // 7L / 100km
+      const price = 2.65; // 2.65 лв / л
 
       const totalLiters = (km / 100) * consumption;
       const totalCost = totalLiters * price;
@@ -388,39 +488,34 @@
       costDiv.innerHTML = `Общо: <strong>${totalCost.toFixed(2)} лв.</strong> (${costPerPerson.toFixed(2)} лв./човек)`;
     }
 
-    // Филтриране
-    function filterPlaces() {
+    // Събитие при промяна на търсачката или категорията
+    function onFilterChange() {
       const search = document.getElementById('searchInput').value.toLowerCase();
       const category = document.getElementById('categoryFilter').value;
 
-      const filtered = allPlaces.filter(place => {
+      currentFilteredList = allPlaces.filter(place => {
         const matchesSearch = place.title.toLowerCase().includes(search) || place.location.toLowerCase().includes(search);
         const matchesCat = category === 'all' || place.category === category;
         return matchesSearch && matchesCat;
       });
 
-      renderPlaces(filtered);
+      currentPage = 1; // Нулираме до Страница 1
+      renderCurrentPage();
     }
 
-    // Избор на случайна дестинация от филтрираните
+    // Случаен избор
     function pickRandom() {
-      const search = document.getElementById('searchInput').value.toLowerCase();
-      const category = document.getElementById('categoryFilter').value;
+      if(currentFilteredList.length === 0) return;
 
-      const filtered = allPlaces.filter(place => {
-        const matchesSearch = place.title.toLowerCase().includes(search) || place.location.toLowerCase().includes(search);
-        const matchesCat = category === 'all' || place.category === category;
-        return matchesSearch && matchesCat;
-      });
-
-      if(filtered.length === 0) return;
-
-      const randomPlace = filtered[Math.floor(Math.random() * filtered.length)];
-      renderPlaces([randomPlace]);
+      const randomIndex = Math.floor(Math.random() * currentFilteredList.length);
+      currentPage = Math.floor(randomIndex / itemsPerPage) + 1;
+      
+      renderCurrentPage();
+      window.scrollTo({ top: 300, behavior: 'smooth' });
     }
 
     // Първоначално зареждане
-    renderPlaces(allPlaces);
+    renderCurrentPage();
   </script>
 </body>
 </html>
