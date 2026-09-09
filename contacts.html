@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Контакти - BGПерли</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --accent: #10b981;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem;
+      background: #020617;
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--accent);
+      text-decoration: none;
+    }
+    nav a {
+      color: var(--text);
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-weight: 500;
+    }
+    nav a.active {
+      background: var(--accent);
+      color: #000;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+    }
+    .container {
+      max-width: 700px;
+      margin: 3rem auto;
+      padding: 0 1.5rem;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 2.5rem;
+      border: 1px solid var(--border);
+    }
+    h1 {
+      color: var(--accent);
+      margin-top: 0;
+    }
+    .contact-item {
+      margin-bottom: 1.5rem;
+    }
+    .contact-item h3 {
+      margin: 0 0 0.3rem 0;
+      color: var(--text);
+    }
+    .contact-item p {
+      margin: 0;
+      color: var(--text-muted);
+    }
+    .contact-item a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="index.html" class="logo">BGПерли 🌲</a>
+    <nav>
+      <a href="index.html">Дестинации</a>
+      <a href="salary.html">Калкулатор Заплата</a>
+      <a href="about.html">За нас</a>
+      <a href="contacts.html" class="active">Контакти</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="card">
+      <h1>Свържете се с нас</h1>
+      <p style="color: var(--text-muted); margin-bottom: 2rem;">
+        Имате въпроси, препоръки или искате да предложите нова дестинация? Пишете ни!
+      </p>
+
+      <div class="contact-item">
+        <h3>📧 Имейл за връзка:</h3>
+        <p><a href="mailto:contact@bgperli.net">contact@bgperli.net</a> (или вашият имейл)</p>
+      </div>
+
+      <div class="contact-item">
+        <h3>📍 Локация:</h3>
+        <p>София, България</p>
+      </div>
+
+      <div class="contact-item">
+        <h3>⏱️ Време за отговор:</h3>
+        <p>Обикновено отговаряме в рамките на 24 до 48 часа.</p>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
