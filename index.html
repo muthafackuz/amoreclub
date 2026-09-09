@@ -181,34 +181,68 @@
   </div>
 
   <script>
-    // Посочи локалните файлове, качени в GitHub:
     const places = [
       {
         title: "Рилски Манастир",
         location: "Рила планина",
-        img: "rila.jpg", 
-        desc: "Най-големият и известен православен манастир в България, част от световното наследство на ЮНЕСКО.",
+        wikiFile: "Rila_Monastery_Bulgaria_Main_Courtyard.jpg",
+        desc: "Най-големият и известен православен манастир в България, част от ЮНЕСКО.",
         km: 240
       },
       {
         title: "Белоградчишки Скали",
         location: "Белоградчик • Северозападна България",
-        img: "belogradchik.jpg",
-        desc: "Уникални червеникави скални образувания с богата история и средновековна крепост.",
+        wikiFile: "Belogradchik_Rocks_2019.jpg",
+        desc: "Уникални червеникави скални образувания с богата история и крепост.",
         km: 430
       },
       {
-        title: "Вазовска Екопътека и водопад Скакля",
-        location: "Искърско дефиле • Стара планина",
-        img: "skaklya.jpg",
-        desc: "Един от най-живописните преходи в района с изумителна гледка към скалите и високия водопад.",
-        km: 120
+        title: "Седемте Рила Езера",
+        location: "Рила планина • Паничище",
+        wikiFile: "Seven_Rila_Lakes_panorama.jpg",
+        desc: "Най-известната езерна група в България, разположена в красив циркус.",
+        km: 190
+      },
+      {
+        title: "Дяволският мост",
+        location: "Родопи • гр. Ардино",
+        wikiFile: "Dyavolski_most_Ardino_01.jpg",
+        desc: "Мистичен средновековен мост над река Арда, заобиколен от природа.",
+        km: 520
+      },
+      {
+        title: "Пещера Проходна (Очите на Бога)",
+        location: "Карлуково • Луковит",
+        wikiFile: "Prohodna_Cave_Eyes_of_God.jpg",
+        desc: "Естествено осветена пещера с два скални отвора, наподобяващи очи.",
+        km: 230
+      },
+      {
+        title: "Царевец",
+        location: "Велико Търново",
+        wikiFile: "Tsarevets_Veliko_Tarnovo.jpg",
+        desc: "Средновековна крепост, била главен образ на Второто българско царство.",
+        km: 440
+      },
+      {
+        title: "Крепост Баба Вида",
+        location: "Видин • Река Дунав",
+        wikiFile: "Baba_Vida_Castle.jpg",
+        desc: "Единствената изцяло запазена средновековна крепост у нас.",
+        km: 400
+      },
+      {
+        title: "Пловдивски Античен Театър",
+        location: "Пловдив • Старият град",
+        wikiFile: "Plovdiv_Ancient_Theatre.jpg",
+        desc: "Един от най-добре запазените антични театри в света.",
+        km: 300
       }
     ];
 
     let currentIndex = -1;
 
-    function generateRandomPlace() {
+    async function generateRandomPlace() {
       let newIndex;
       do {
         newIndex = Math.floor(Math.random() * places.length);
@@ -219,9 +253,24 @@
 
       document.getElementById('placeTitle').innerText = place.title;
       document.getElementById('placeLocation').innerText = place.location;
-      document.getElementById('placeImg').src = place.img;
       document.getElementById('placeDesc').innerText = place.desc;
       document.getElementById('distance').value = place.km;
+
+      // Вземаме истинската снимка директно през API-то на Wikipedia
+      const wikiApiUrl = `https://en.wikipedia.org/w/api.php?action=query&titles=File:${encodeURIComponent(place.wikiFile)}&prop=imageinfo&iiprop=url&format=json&origin=*`;
+
+      try {
+        const response = await fetch(wikiApiUrl);
+        const data = await response.json();
+        const pages = data.query.pages;
+        const pageKey = Object.keys(pages)[0];
+        const imageUrl = pages[pageKey].imageinfo[0].url;
+
+        // Прекарваме я през прокси, за да не се блокира
+        document.getElementById('placeImg').src = `https://images.weserv.nl/?url=${encodeURIComponent(imageUrl)}`;
+      } catch (err) {
+        document.getElementById('placeImg').src = "https://via.placeholder.com/800x500?text=Дестинация";
+      }
 
       calculateFuel();
     }
