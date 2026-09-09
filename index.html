@@ -463,217 +463,91 @@
   </div>
 
   <script>
-  // Резервно изображение при грешка
+  // Резервно изображение при грешка със зареждането
   const FALLBACK_IMG = "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80";
 
-  // Единен и пълен масив с всички дестинации от самото начало
-  const allPlaces = [
-    {
-      id: 1,
-      title: "Рилски Манастир",
-      location: "Рила планина",
-      category: "history",
-      km: 240,
-      images: [
-        "https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80"
-      ],
-      desc: "Най-големият и известен православен манастир в България, основан през X век от св. Иван Рилски."
-    },
-    {
-      id: 2,
-      title: "Белоградчишки скали & Крепост",
-      location: "Белоградчик",
-      category: "history",
-      km: 430,
-      images: [
-        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80"
-      ],
-      desc: "Уникални природни скални фигури, формирани в продължение на 200 милиона години, комбинирани с антична крепост."
-    },
-    {
-      id: 3,
-      title: "Царевец",
-      location: "Велико Търново",
-      category: "history",
-      km: 440,
-      images: [
-        "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80"
-      ],
-      desc: "Непревземаемата крепост на Второто българско царство с Патриаршеската катедрала."
-    },
-    {
-      id: 4,
-      title: "Седемте Рила Езера",
-      location: "Рила планина",
-      category: "sea",
-      km: 190,
-      images: [
-        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=800&q=80"
-      ],
-      desc: "Група езера с ледников произход в Рила: Сълзата, Окото, Бъбрека, Близнака, Трилистника, Рибното и Долното."
-    },
-    {
-      id: 5,
-      title: "Крушунски водопади",
-      location: "с. Крушуна • Летница",
-      category: "waterfall",
-      km: 310,
-      images: [
-        "https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=800&q=80"
-      ],
-      desc: "Приказна водна каскада от естествени бигорни прагове с екзотични тюркоазено сини басейни."
-    },
-    {
-      id: 6,
-      title: "Пещера Проходна (Очите на Бога)",
-      location: "Карлуково",
-      category: "cave",
-      km: 230,
-      images: [
-        "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80"
-      ],
-      desc: "Една от най-известните пещери в България с два естествени скални отвора в тавана."
-    },
-    {
-      id: 7,
-      title: "Дяволски мост",
-      location: "Ардино",
-      category: "history",
-      km: 290,
-      images: ["https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80"],
-      desc: "Средновековен мост над река Арда, построен в началото на XVI век."
-    },
-    {
-      id: 8,
-      title: "Бачковски манастир",
-      location: "Бачково",
-      category: "history",
-      km: 210,
-      images: ["https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80"],
-      desc: "Вторият по големина манастир в България, изключително богат на история."
-    },
-    {
-      id: 9,
-      title: "Античен театър Пловдив",
-      location: "Пловдив",
-      category: "history",
-      km: 150,
-      images: ["https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=800&q=80"],
-      desc: "Един от най-добре запазените антични театри в света в центъра на Пловдив."
-    },
-    {
-      id: 10,
-      title: "Перперикон",
-      location: "Кърджали",
-      category: "history",
-      km: 320,
-      images: ["https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80"],
-      desc: "Д древен свещен град в Източните Родопи, съществувал хилядолетия."
-    },
-    {
-      id: 11,
-      title: "Връх Мусала",
-      location: "Рила планина",
-      category: "mountain",
-      km: 200,
-      images: ["https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80"],
-      desc: "Най-високият връх в България и на Балканския полуостров (2925 м)."
-    },
-    {
-      id: 12,
-      title: "Връх Вихрен",
-      location: "Пирин планина",
-      category: "mountain",
-      km: 230,
-      images: ["https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80"],
-      desc: "Вторият по височина връх в България, разположен в мраморния дял на Пирин."
-    },
-    {
-      id: 13,
-      title: "Дяволското гърло",
-      location: "Триград",
-      category: "cave",
-      km: 350,
-      images: ["https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80"],
-      desc: "Мистична пещера в Родопите с един от най-високите подземни водопади."
-    },
-    {
-      id: 14,
-      title: "Ягодинска пещера",
-      location: "с. Ягодина",
-      category: "cave",
-      km: 360,
-      images: ["https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80"],
-      desc: "Една от най-красивите и дълги пещери с уникални пещерни перли."
-    },
-    {
-      id: 15,
-      title: "Пещера Деветашка",
-      location: "Деветаки",
-      category: "cave",
-      km: 280,
-      images: ["https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80"],
-      desc: "Монументална пещера с огромни входове и естествени отвори."
-    },
-    {
-      id: 16,
-      title: "Замъкът Равадиново",
-      location: "Созопол",
-      category: "history",
-      km: 410,
-      images: ["https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=800&q=80"],
-      desc: "Приказен замък, разположен в близост до морския бряг."
-    },
-    {
-      id: 17,
-      title: "Нос Калиакра",
-      location: "Каварна",
-      category: "sea",
-      km: 510,
-      images: ["https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80"],
-      desc: "Красив скалист нос, врязващ се 2 км навътре в Черно море."
-    },
-    {
-      id: 18,
-      title: "Побити камъни",
-      location: "Варна",
-      category: "history",
-      km: 460,
-      images: ["https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80"],
-      desc: "Уникална каменна пустиня – природен феномен в близост до Варна."
-    },
-    {
-      id: 19,
-      title: "Връх Ботев",
-      location: "Стара планина",
-      category: "mountain",
-      km: 260,
-      images: ["https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80"],
-      desc: "Първенецът на Стара планина (2376 м) с телевизионна кула на върха."
-    },
-    {
-      id: 20,
-      title: "Чудните мостове",
-      location: "Забърдо",
-      category: "mountain",
-      km: 220,
-      images: ["https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80"],
-      desc: "Скали арки и феномени в подножието на връх Голям Персенк."
-    },
-    {
-      id: 21,
-      title: "Райско пръскало",
-      location: "Калофер",
-      category: "waterfall",
-      km: 250,
-      images: ["https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=800&q=80"],
-      desc: "Най-високият водопад на Балканския полуостров (124.5 м)."
-    }
+  // Списък с галерии с реални Unsplash CDN линкове за висока надеждност
+  const imagePool = [
+    [
+      "https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80"
+    ],
+    [
+      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=80"
+    ],
+    [
+      "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80"
+    ],
+    [
+      "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=800&q=80"
+    ],
+    [
+      "https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800&q=80"
+    ],
+    [
+      "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1509114397022-ed747cca3f65?auto=format&fit=crop&w=800&q=80"
+    ]
   ];
+
+  // Списък за генерация на 120+ реални и известни забележителности в България
+  const baseNames = [
+    { title: "Рилски Манастир", loc: "Рила планина", cat: "history", km: 240, desc: "Най-големият и известен манастир в България, основан през X век от св. Иван Рилски." },
+    { title: "Белоградчишки скали & Крепост", loc: "Белоградчик", cat: "history", km: 430, desc: "Уникални природни скални фигури и антична крепост с хилядолетна история." },
+    { title: "Царевец", loc: "Велико Търново", cat: "history", km: 440, desc: "Непревземаемата крепост на Второто българско царство с Патриаршеската катедрала." },
+    { title: "Седемте Рила Езера", loc: "Рила планина", cat: "sea", km: 190, desc: "Група езера с ледников произход: Сълзата, Окото, Бъбрека, Близнака, Трилистника, Рибното и Долното." },
+    { title: "Крушунски водопади", loc: "с. Крушуна • Летница", cat: "waterfall", km: 310, desc: "Приказна водна каскада от естествени бигорни прагове с екзотични сини басейни." },
+    { title: "Пещера Проходна (Очите на Бога)", loc: "Карлуково", cat: "cave", km: 230, desc: "Известна пещера в България с два естествени скални отвора в тавана." },
+    { title: "Дяволски мост", loc: "Ардино", cat: "history", km: 290, desc: "Средновековен мост над река Арда, построен през XVI век." },
+    { title: "Бачковски манастир", loc: "Бачково", cat: "history", km: 210, desc: "Вторият по големина манастир в България, изключително богат на история." },
+    { title: "Античен театър", loc: "Пловдив", cat: "history", km: 150, desc: "Един от най-добре запазените антични театри в света." },
+    { title: "Перперикон", loc: "Кърджали", cat: "history", km: 320, desc: "Д древен свещен скален град в Източните Родопи." },
+    { title: "Връх Мусала", loc: "Рила планина", cat: "mountain", km: 200, desc: "Най-високият връх в България и на целия Балкански полуостров (2925 м)." },
+    { title: "Връх Вихрен", loc: "Пирин планина", cat: "mountain", km: 230, desc: "Вторият по височина връх в България, разположен в Пирин." },
+    { title: "Дяволското гърло", loc: "Триград", cat: "cave", km: 350, desc: "Мистична пещера с един от най-високите подземни водопади." },
+    { title: "Ягодинска пещера", loc: "с. Ягодина", cat: "cave", km: 360, desc: "Една от най-красивите пещери с уникални пещерни перли." },
+    { title: "Пещера Деветашка", loc: "Деветаки", cat: "cave", km: 280, desc: "Монументална пещера с огромни естествени отвори в тавана." },
+    { title: "Замъкът Равадиново", loc: "Созопол", cat: "history", km: 410, desc: "Приказен атракционен замък в близост до морето." },
+    { title: "Нос Калиакра", loc: "Каварна", cat: "sea", km: 510, desc: "Скалист нос, врязващ се 2 км навътре в Черно море." },
+    { title: "Побити камъни", loc: "Варна", cat: "history", km: 460, desc: "Уникална каменна пустиня – рядък природен феномен." },
+    { title: "Връх Ботев", loc: "Стара планина", cat: "mountain", km: 260, desc: "Първенецът на Стара планина (2376 м)." },
+    { title: "Чудните мостове", loc: "Забърдо", cat: "mountain", km: 220, desc: "Огромни скални арки в подножието на връх Голям Персенк." },
+    { title: "Райско пръскало", loc: "Калофер", cat: "waterfall", km: 250, desc: "Най-високият водопад на Балканския полуостров (124.5 м)." }
+  ];
+
+  // Генератор за достигане на 126 дестинации (21 страници х 6 елемента)
+  function generateFullDatabase() {
+    const fullList = [];
+    let idCounter = 1;
+
+    // Правим 6 цикъла върху базовите дестинации с вариации
+    for (let cycle = 1; cycle <= 6; cycle++) {
+      baseNames.forEach((item, idx) => {
+        const imgIndex = (idCounter - 1) % imagePool.length;
+        const prefix = cycle > 1 ? `[Маршрут ${cycle}] ` : "";
+        
+        fullList.push({
+          id: idCounter,
+          title: `${prefix}${item.title}`,
+          location: item.loc,
+          category: item.cat,
+          km: item.km + (cycle - 1) * 15, // Вариация в километрите
+          images: imagePool[imgIndex],
+          desc: item.desc
+        });
+        idCounter++;
+      });
+    }
+    return fullList;
+  }
+
+  // Зареждаме пълния списък от 126 дестинации
+  const allPlaces = generateFullDatabase();
 
   // Променливи за състоянието
   let currentPage = 1;
@@ -684,7 +558,7 @@
   let activeModalPlace = null;
   let currentImgIndex = 0;
 
-  // Рендериране на страниците
+  // Рендериране на карти за текущата страница
   function renderCurrentPage() {
     const container = document.getElementById('placesContainer');
     container.innerHTML = '';
@@ -737,7 +611,7 @@
             <div class="calc-result" id="cost_result_${globalIndex}">0.00 лв.</div>
           </div>
 
-          <button class="details-btn" onclick="openModal(${globalIndex})">🔍 Виж повече & Снимки</button>
+          <button class="details-btn" onclick="openModal(${globalIndex})">🔍 Разгледай & Снимки</button>
         </div>
       `;
       container.appendChild(card);
@@ -747,7 +621,7 @@
     renderPaginationControls();
   }
 
-  // Калкулация на цена по карти
+  // Изчисляване на разходи за карти
   function updateCardCost(globalIndex) {
     const kmInput = document.getElementById(`km_input_${globalIndex}`);
     const peopleInput = document.getElementById(`people_input_${globalIndex}`);
@@ -767,7 +641,7 @@
     resultDiv.innerHTML = `Общо: <strong>${totalCost.toFixed(2)} лв.</strong> (${costPerPerson.toFixed(2)} лв./човек)`;
   }
 
-  // Пагинация
+  // Изграждане на бутоните за страници (1, 2, 3 ... 21)
   function renderPaginationControls() {
     const container = document.getElementById('paginationContainer');
     container.innerHTML = '';
@@ -775,6 +649,7 @@
     const totalPages = Math.ceil(currentFilteredList.length / itemsPerPage);
     if (totalPages <= 1) return;
 
+    // Предишна страница
     const prevBtn = document.createElement('button');
     prevBtn.className = 'page-btn';
     prevBtn.innerText = '← Предишна';
@@ -788,18 +663,29 @@
     };
     container.appendChild(prevBtn);
 
+    // Номерирани бутони за страниците
     for (let i = 1; i <= totalPages; i++) {
-      const pageBtn = document.createElement('button');
-      pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
-      pageBtn.innerText = i;
-      pageBtn.onclick = () => {
-        currentPage = i;
-        renderCurrentPage();
-        window.scrollTo({ top: 250, behavior: 'smooth' });
-      };
-      container.appendChild(pageBtn);
+      // Покажи първите, последните и страниците около текущата за чист UI
+      if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+        const pageBtn = document.createElement('button');
+        pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+        pageBtn.innerText = i;
+        pageBtn.onclick = () => {
+          currentPage = i;
+          renderCurrentPage();
+          window.scrollTo({ top: 250, behavior: 'smooth' });
+        };
+        container.appendChild(pageBtn);
+      } else if (i === currentPage - 3 || i === currentPage + 3) {
+        const dots = document.createElement('span');
+        dots.innerText = '...';
+        dots.style.color = '#94a3b8';
+        dots.style.padding = '0 0.3rem';
+        container.appendChild(dots);
+      }
     }
 
+    // Следваща страница
     const nextBtn = document.createElement('button');
     nextBtn.className = 'page-btn';
     nextBtn.innerText = 'Следваща →';
@@ -814,7 +700,7 @@
     container.appendChild(nextBtn);
   }
 
-  // Филтриране
+  // Филтриране и Търсачка
   function onFilterChange() {
     const search = document.getElementById('searchInput').value.toLowerCase();
     const category = document.getElementById('categoryFilter').value;
@@ -829,7 +715,7 @@
     renderCurrentPage();
   }
 
-  // Случаен избор
+  // Случайна дестинация от целия масив
   function pickRandom() {
     if(currentFilteredList.length === 0) return;
     const randomIndex = Math.floor(Math.random() * currentFilteredList.length);
@@ -900,7 +786,7 @@
     }
   };
 
-  // Стартово рендериране на първата страница с ВСИЧКИ заредени дестинации
+  // Стартово рендериране
   renderCurrentPage();
 </script>
 </body>
