@@ -47,10 +47,90 @@
       padding: 0.5rem 1rem;
       border-radius: 6px;
     }
-    .container {
-      max-width: 1100px;
+
+    /* Layout за страницата със странични ленти */
+    .page-layout {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 1.5rem;
+      max-width: 1600px;
       margin: 2rem auto;
       padding: 0 1rem;
+    }
+
+    /* Рекламни колони отляво и отдясно */
+    .ad-sidebar {
+      width: 160px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .ad-box {
+      background: var(--card-bg);
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      padding: 0.8rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      min-height: 400px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .affiliate-links {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+    .affiliate-links h5 {
+      margin: 0 0 0.8rem 0;
+      color: var(--accent);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.4rem;
+    }
+    .affiliate-links ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .affiliate-links li {
+      margin-bottom: 0.6rem;
+    }
+    .affiliate-links a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .affiliate-links a:hover {
+      color: var(--accent);
+    }
+
+    /* Скриване на страничните реклами при по-малки екрани */
+    @media (max-width: 1200px) {
+      .ad-sidebar {
+        display: none;
+      }
+    }
+
+    .container {
+      flex: 1;
+      max-width: 1100px;
+      width: 100%;
     }
 
     /* Филтри и Търсачка */
@@ -380,6 +460,43 @@
       font-size: 0.8rem;
     }
 
+    /* Реклама и афилиейт вътре в Pop-up */
+    .modal-ad-section {
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px dashed var(--border);
+    }
+    .modal-ad-box {
+      background: #020617;
+      border: 1px solid var(--border);
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: center;
+      margin-bottom: 0.8rem;
+    }
+    .modal-affiliates {
+      display: flex;
+      justify-content: space-around;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .modal-affiliate-btn {
+      flex: 1 1 140px;
+      padding: 0.5rem;
+      background: var(--border);
+      color: var(--text);
+      text-align: center;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+    .modal-affiliate-btn:hover {
+      background: var(--accent);
+      color: #000;
+    }
+
     .no-results {
       grid-column: 1 / -1;
       text-align: center;
@@ -392,52 +509,89 @@
 <body>
 
   <header>
-    <a href="index.html" class="logo">AmoreClub.Net - Дестинации и още нещо </a>
+    <a href="index.html" class="logo">AmoreClub.Net - Дестинации и още нещо</a>
     <nav>
       <a href="index.html">Разгледай дестинациите</a>
       <a href="salary.html" class="highlight">Калкулатор на Заплата</a>
     </nav>
   </header>
 
-  <div class="container">
+  <!-- Главен Layout с рекламни странични ленти -->
+  <div class="page-layout">
     
-    <!-- Филтри и Търсачка -->
-    <div class="controls">
-      <div class="search-box">
-        <input type="text" id="searchInput" placeholder="🔍 Търси дестинация или градове..." oninput="onFilterChange()">
+    <!-- ЛЯВА РЕКЛАМНА КОЛОНА -->
+    <aside class="ad-sidebar">
+      <div class="ad-box">
+        <!-- Тук поставяте Google AdSense скрипта за ляво каре (например 160x600) -->
+        <span>Google AdSense<br>(Лява реклама)</span>
       </div>
-      <div class="filter-box">
-        <select id="categoryFilter" onchange="onFilterChange()">
-          <option value="all">Всички категории</option>
-          <option value="waterfall">Водопади</option>
-          <option value="cave">Пещери</option>
-          <option value="history">Манастири & История</option>
-          <option value="mountain">Планини & Върхове</option>
-          <option value="sea">Езера & Море</option>
-        </select>
+      <div class="affiliate-links">
+        <h5>Препоръчано</h5>
+        <ul>
+          <li><a href="https://example.com" target="_blank" rel="nofollow">🏨 Хотели & Нощувки</a></li>
+          <li><a href="https://example.com" target="_blank" rel="nofollow">🚗 Коли под наем</a></li>
+          <li><a href="https://example.com" target="_blank" rel="nofollow">🎒 Туристическа екипировка</a></li>
+        </ul>
       </div>
-      <button class="random-btn" onclick="pickRandom()">🎲 Случайна дестинация</button>
-      <center><h3>Изберете категория или я напишете в полето, за да улесните търсенето си!</h3></center>
-    </div>
-    <div>
-      <text>
-        <h4>
-         * Възможни са разминавания между изображенията и дестинацията!
-         * Въведете километрите от вашето населено място до дадената дестинация,за да изчислите сумата за гориво до нея!
-         * Цените са ориентировъчни и не ви гарантират нищо!
-          
-        </h4>
-      </text>
-    </div>
-    <!-- Мрежа от дестинации -->
-    <div class="places-grid" id="placesContainer"></div>
+    </aside>
 
-    <!-- Страници / Пагинация -->
-    <div class="pagination" id="paginationContainer"></div>
+    <!-- ЦЕНТРАЛНО СЪДЪРЖАНИЕ -->
+    <div class="container">
+      
+      <!-- Филтри и Търсачка -->
+      <div class="controls">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="🔍 Търси дестинация или градове..." oninput="onFilterChange()">
+        </div>
+        <div class="filter-box">
+          <select id="categoryFilter" onchange="onFilterChange()">
+            <option value="all">Всички категории</option>
+            <option value="waterfall">Водопади</option>
+            <option value="cave">Пещери</option>
+            <option value="history">Манастири & История</option>
+            <option value="mountain">Планини & Върхове</option>
+            <option value="sea">Езера & Море</option>
+          </select>
+        </div>
+        <button class="random-btn" onclick="pickRandom()">🎲 Случайна дестинация</button>
+        <center><h3>Изберете категория или я напишете в полето, за да улесните търсенето си!</h3></center>
+      </div>
+
+      <div>
+        <h4>
+         * Възможни са разминавания между изображенията и дестинацията!<br>
+         * Въведете километрите от вашето населено място до дадената дестинация, за да изчислите сумата за гориво до нея!<br>
+         * Цените са ориентировъчни и не ви гарантират нищо!
+        </h4>
+      </div>
+
+      <!-- Мрежа от дестинации -->
+      <div class="places-grid" id="placesContainer"></div>
+
+      <!-- Страници / Пагинация -->
+      <div class="pagination" id="paginationContainer"></div>
+
+    </div>
+
+    <!-- ДЯСНА РЕКЛАМНА КОЛОНА -->
+    <aside class="ad-sidebar">
+      <div class="ad-box">
+        <!-- Тук поставяте Google AdSense скрипта за дясно каре -->
+        <span>Google AdSense<br>(Дясна реклама)</span>
+      </div>
+      <div class="affiliate-links">
+        <h5>Партньори</h5>
+        <ul>
+          <li><a href="https://example.com" target="_blank" rel="nofollow">⛽ Евтино гориво / Карти</a></li>
+          <li><a href="https://example.com" target="_blank" rel="nofollow">📸 Застраховка при пътуване</a></li>
+          <li><a href="https://example.com" target="_blank" rel="nofollow">🎟️ Билети за забележителности</a></li>
+        </ul>
+      </div>
+    </aside>
 
   </div>
 
-  <!-- Pop-up (Модален прозорец) за детайли и галерия -->
+  <!-- Pop-up (Модален прозорец) за детайли, галерия и Афилиейт -->
   <div class="modal-overlay" id="modalOverlay">
     <div class="modal-content">
       <button class="modal-close" onclick="closeModal()">&times;</button>
@@ -469,14 +623,26 @@
         </div>
         <div class="calc-result" id="modalCost"> Изчисляване... </div>
       </div>
+
+      <!-- РЕКЛАМА И АФИЛИЕЙТИ В POP-UP -->
+      <div class="modal-ad-section">
+        <div class="modal-ad-box">
+          <!-- Google AdSense респонсив банер за Pop-up -->
+          <span style="color: var(--text-muted); font-size: 0.8rem;">Google AdSense (Вътрешна реклама)</span>
+        </div>
+        <div class="modal-affiliates">
+          <a href="https://booking.com" target="_blank" rel="nofollow" class="modal-affiliate-btn">🏨 Резервирай нощувка</a>
+          <a href="https://rentalcars.com" target="_blank" rel="nofollow" class="modal-affiliate-btn">🚗 Наеми автомобил</a>
+          <a href="https://getyourguide.com" target="_blank" rel="nofollow" class="modal-affiliate-btn">🎟️ Купи тур / Билет</a>
+        </div>
+      </div>
+
     </div>
   </div>
 
   <script>
-  // Резервно изображение при грешка със зареждането
   const FALLBACK_IMG = "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80";
 
-  // Списък с галерии с реални Unsplash CDN линкове за висока надеждност
   const imagePool = [
     [
       "https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?auto=format&fit=crop&w=800&q=80",
@@ -505,7 +671,6 @@
     ]
   ];
 
-  // Списък за генерация на 120+ реални и известни забележителности в България
   const baseNames = [
     { title: "Рилски Манастир", loc: "Рила планина", cat: "history", km: 240, desc: "Най-големият и известен манастир в България, основан през X век от св. Иван Рилски." },
     { title: "Белоградчишки скали & Крепост", loc: "Белоградчик", cat: "history", km: 430, desc: "Уникални природни скални фигури и антична крепост с хилядолетна история." },
@@ -524,20 +689,18 @@
     { title: "Пещера Деветашка", loc: "Деветаки", cat: "cave", km: 280, desc: "Монументална пещера с огромни естествени отвори в тавана." },
     { title: "Замъкът Равадиново", loc: "Созопол", cat: "history", km: 410, desc: "Приказен атракционен замък в близост до морето." },
     { title: "Нос Калиакра", loc: "Каварна", cat: "sea", km: 510, desc: "Скалист нос, врязващ се 2 км навътре в Черно море." },
-    { title: "Побити камъни", loc: "Варна", cat: "history", km: 460, desc: "Уникална каменна пустиня – рядък природен феномен." },
+    { title: "Побити камъни", loc: "Варна", cat: "history", km: 460, desc: "Уникална каменна пустиня – редък природен феномен." },
     { title: "Връх Ботев", loc: "Стара планина", cat: "mountain", km: 260, desc: "Първенецът на Стара планина (2376 м)." },
     { title: "Чудните мостове", loc: "Забърдо", cat: "mountain", km: 220, desc: "Огромни скални арки в подножието на връх Голям Персенк." },
     { title: "Райско пръскало", loc: "Калофер", cat: "waterfall", km: 250, desc: "Най-високият водопад на Балканския полуостров (124.5 м)." }
   ];
 
-  // Генератор за достигане на 126 дестинации (21 страници х 6 елемента)
   function generateFullDatabase() {
     const fullList = [];
     let idCounter = 1;
 
-    // Правим 6 цикъла върху базовите дестинации с вариации
     for (let cycle = 1; cycle <= 6; cycle++) {
-      baseNames.forEach((item, idx) => {
+      baseNames.forEach((item) => {
         const imgIndex = (idCounter - 1) % imagePool.length;
         const prefix = cycle > 1 ? `[Маршрут ${cycle}] ` : "";
         
@@ -546,7 +709,7 @@
           title: `${prefix}${item.title}`,
           location: item.loc,
           category: item.cat,
-          km: item.km + (cycle - 1) * 15, // Вариация в километрите
+          km: item.km + (cycle - 1) * 15,
           images: imagePool[imgIndex],
           desc: item.desc
         });
@@ -556,19 +719,15 @@
     return fullList;
   }
 
-  // Зареждаме пълния списък от 126 дестинации
   const allPlaces = generateFullDatabase();
 
-  // Променливи за състоянието
   let currentPage = 1;
   const itemsPerPage = 6;
   let currentFilteredList = [...allPlaces];
   
-  // Модал променливи
   let activeModalPlace = null;
   let currentImgIndex = 0;
 
-  // Рендериране на карти за текущата страница
   function renderCurrentPage() {
     const container = document.getElementById('placesContainer');
     container.innerHTML = '';
@@ -631,7 +790,6 @@
     renderPaginationControls();
   }
 
-  // Изчисляване на разходи за карти
   function updateCardCost(globalIndex) {
     const kmInput = document.getElementById(`km_input_${globalIndex}`);
     const peopleInput = document.getElementById(`people_input_${globalIndex}`);
@@ -642,8 +800,8 @@
     const km = parseFloat(kmInput.value) || 0;
     const people = parseInt(peopleInput.value) || 1;
 
-    const consumption = 7.0; // 7 л / 100 км
-    const fuelPrice = 2.65;  // 2.65 лв / литър
+    const consumption = 7.0;
+    const fuelPrice = 2.65;
 
     const totalCost = (km / 100) * consumption * fuelPrice;
     const costPerPerson = totalCost / people;
@@ -651,7 +809,6 @@
     resultDiv.innerHTML = `Общо: <strong>${totalCost.toFixed(2)} лв.</strong> (${costPerPerson.toFixed(2)} лв./човек)`;
   }
 
-  // Изграждане на бутоните за страници (1, 2, 3 ... 21)
   function renderPaginationControls() {
     const container = document.getElementById('paginationContainer');
     container.innerHTML = '';
@@ -659,7 +816,6 @@
     const totalPages = Math.ceil(currentFilteredList.length / itemsPerPage);
     if (totalPages <= 1) return;
 
-    // Предишна страница
     const prevBtn = document.createElement('button');
     prevBtn.className = 'page-btn';
     prevBtn.innerText = '← Предишна';
@@ -673,9 +829,7 @@
     };
     container.appendChild(prevBtn);
 
-    // Номерирани бутони за страниците
     for (let i = 1; i <= totalPages; i++) {
-      // Покажи първите, последните и страниците около текущата за чист UI
       if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
         const pageBtn = document.createElement('button');
         pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
@@ -695,7 +849,6 @@
       }
     }
 
-    // Следваща страница
     const nextBtn = document.createElement('button');
     nextBtn.className = 'page-btn';
     nextBtn.innerText = 'Следваща →';
@@ -710,7 +863,6 @@
     container.appendChild(nextBtn);
   }
 
-  // Филтриране и Търсачка
   function onFilterChange() {
     const search = document.getElementById('searchInput').value.toLowerCase();
     const category = document.getElementById('categoryFilter').value;
@@ -725,14 +877,12 @@
     renderCurrentPage();
   }
 
-  // Случайна дестинация от целия масив
   function pickRandom() {
     if(currentFilteredList.length === 0) return;
     const randomIndex = Math.floor(Math.random() * currentFilteredList.length);
     openModal(randomIndex);
   }
 
-  // --- POP-UP (MODAL) И ГАЛЕРИЯ ---
   function openModal(globalIndex) {
     activeModalPlace = currentFilteredList[globalIndex];
     if (!activeModalPlace) return;
@@ -796,7 +946,6 @@
     }
   };
 
-  // Стартово рендериране
   renderCurrentPage();
 </script>
 </body>
