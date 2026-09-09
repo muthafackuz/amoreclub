@@ -3,14 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BG Перли & Травел Калкулатор</title>
+  <title>BG Перли - Безкраен Генератор на Дестинации</title>
   <style>
     :root {
       --bg: #0f172a;
       --card-bg: #1e293b;
       --accent: #10b981;
+      --accent-hover: #059669;
       --text: #f8fafc;
       --text-muted: #94a3b8;
+      --border: #334155;
     }
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -25,7 +27,7 @@
       align-items: center;
       padding: 1.5rem 2rem;
       background: #020617;
-      border-bottom: 1px solid #334155;
+      border-bottom: 1px solid var(--border);
     }
     .logo {
       font-size: 1.5rem;
@@ -46,22 +48,45 @@
       border-radius: 6px;
     }
     .container {
-      max-width: 900px;
+      max-width: 800px;
       margin: 2rem auto;
       padding: 0 1rem;
+    }
+    .generator-btn {
+      display: block;
+      width: 100%;
+      padding: 1.2rem;
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #000;
+      background-color: var(--accent);
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+    }
+    .generator-btn:hover {
+      background-color: var(--accent-hover);
+    }
+    .generator-btn:active {
+      transform: scale(0.98);
     }
     .card {
       background: var(--card-bg);
       border-radius: 12px;
       padding: 1.5rem;
-      margin-bottom: 2rem;
-      border: 1px solid #334155;
+      border: 1px solid var(--border);
+      transition: opacity 0.3s ease-in-out;
     }
     .destination-img {
       width: 100%;
-      height: 300px;
+      height: 380px;
       object-fit: cover;
       border-radius: 8px;
+      margin-top: 1rem;
+      background-color: #020617;
     }
     .calculator {
       background: #020617;
@@ -100,6 +125,7 @@
       background: #064e3b;
       border-radius: 6px;
       text-align: center;
+      color: #34d399;
     }
   </style>
 </head>
@@ -114,20 +140,22 @@
   </header>
 
   <div class="container">
-    <div class="card">
-      <h2>1. Вазовска Екопътека и водопад Скакля</h2>
-      <p style="color: var(--text-muted);">Искърско дефиле • На 1 час от София</p>
+    <button class="generator-btn" id="genBtn" onclick="fetchNewDestination()">🌐 ГЕНЕРИРАЙ СЛЕДВАЩА ИЗНЕНАДА (LIVE API)</button>
+
+    <div class="card" id="placeCard">
+      <h2 id="placeTitle">Зареждане на дестинация...</h2>
+      <p id="placeLocation" style="color: var(--text-muted);">Автоматично генерирано от база данни</p>
       
-      <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800" alt="Водопад" class="destination-img">
+      <img id="placeImg" src="" alt="Дестинация" class="destination-img">
       
-      <p>Една от най-красивите и лесни за преход маршрути около София. Пътеката крие живописни гледки към дефилето и завършва с един от най-високите водопади в България.</p>
+      <p id="placeDesc">Натиснете бутона горе, за да изтеглите ново място, снимка и автоматичен маршрут!</p>
 
       <div class="calculator">
-        <h3>🚗 Изчисли колко ще ти струва това пътуване</h3>
+        <h3>🚗 Калкулатор за това пътуване</h3>
         
         <div class="form-group">
-          <label>Разстояние в двете посоки (км):</label>
-          <input type="number" id="distance" value="120">
+          <label>Приблиз. разстояние в двете посоки (км):</label>
+          <input type="number" id="distance" value="150">
         </div>
 
         <div class="form-group">
@@ -146,13 +174,71 @@
         </div>
 
         <div class="result" id="totalResult">
-          Общо за гориво: 22.26 лв. (7.42 лв. на човек)
+          Общо за гориво: 0.00 лв.
         </div>
       </div>
     </div>
   </div>
 
   <script>
+    // Списък с ключови теми за природа, скали, планини и езера
+    const topics = ['mountain', 'waterfall', 'canyon', 'forest', 'lake', 'castle', 'nature'];
+    
+    // Примерни локации за изненадващо генериране
+    const titles = [
+      "Мистично каньонно ждрело",
+      "Планински водопад и панорама",
+      "Езерно плато и природна екопътека",
+      "Вековна крепост в скалите",
+      "Скрита пещера и скални отвори",
+      "Родопска панорамна площадка",
+      "Речен завой и вековна гора"
+    ];
+
+    async function fetchNewDestination() {
+      const card = document.getElementById('placeCard');
+      const btn = document.getElementById('genBtn');
+      
+      btn.innerText = "⏳ Зареждане на живо...";
+      card.style.opacity = 0.4;
+
+      // Избиране на произволна тема
+      const randomTopic = topics[Math.floor(Math.random() * topics.length)];
+      const randomTitle = titles[Math.floor(Math.random() * titles.length)];
+      
+      // Генериране на ново произволно разстояние (между 80 км и 480 км)
+      const randomKm = Math.floor(Math.random() * (480 - 80 + 1)) + 80;
+
+      // Теглене на снимка в реално време от Unsplash Source API
+      const timestamp = new Date().getTime(); // За да не кешира същата снимка
+      const imgUrl = `https://source.unsplash.com/800x600/?${randomTopic}&sig=${timestamp}`;
+
+      // Обновяване на съдържанието
+      document.getElementById('placeTitle').innerText = randomTitle;
+      document.getElementById('placeLocation').innerText = `Генерирана дестинация • Категория: ${randomTopic.toUpperCase()}`;
+      document.getElementById('placeDesc').innerText = `Открийте невероятната красота на тази дестинация. Подходяща за уикенд разходка и бягство от градския шум.`;
+      
+      // Зареждаме снимката
+      const imgTag = document.getElementById('placeImg');
+      imgTag.src = imgUrl;
+
+      // Обновяваме километрите в калкулатора
+      document.getElementById('distance').value = randomKm;
+
+      imgTag.onload = () => {
+        card.style.opacity = 1;
+        btn.innerText = "🌐 ГЕНЕРИРАЙ СЛЕДВАЩА ИЗНЕНАДА (LIVE API)";
+        calculateFuel();
+      };
+      
+      // За всеки случай, ако снимката забави:
+      setTimeout(() => {
+        card.style.opacity = 1;
+        btn.innerText = "🌐 ГЕНЕРИРАЙ СЛЕДВАЩА ИЗНЕНАДА (LIVE API)";
+        calculateFuel();
+      }, 1000);
+    }
+
     const distanceInput = document.getElementById('distance');
     const consumptionInput = document.getElementById('consumption');
     const priceInput = document.getElementById('price');
@@ -176,6 +262,9 @@
     consumptionInput.addEventListener('input', calculateFuel);
     priceInput.addEventListener('input', calculateFuel);
     peopleInput.addEventListener('input', calculateFuel);
+
+    // Зареждаме първоначална дестинация при отваряне
+    fetchNewDestination();
   </script>
 </body>
 </html>
