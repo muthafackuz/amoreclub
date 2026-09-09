@@ -182,54 +182,47 @@
   </div>
 
   <script>
-    // Илюстрации, внедрени директно в кода (100% гаранция за показване)
-    const svgWaterfall = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='500' viewBox='0 0 800 500'><rect width='800' height='500' fill='%230f172a'/><path d='M150 500 L300 150 L450 500' fill='%231e293b'/><path d='M350 500 L550 100 L750 500' fill='%23334155'/><path d='M380 120 L370 500 L420 500 L400 120 Z' fill='%2338bdf8' opacity='0.8'/><circle cx='400' cy='60' r='40' fill='%23fef08a'/></svg>";
-    const svgLakes = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='500' viewBox='0 0 800 500'><rect width='800' height='500' fill='%23020617'/><path d='M0 500 L200 200 L400 500' fill='%231e293b'/><path d='M300 500 L550 150 L800 500' fill='%230f172a'/><ellipse cx='400' cy='380' rx='250' ry='70' fill='%230284c7'/><ellipse cx='250' cy='280' rx='120' ry='35' fill='%2338bdf8'/></svg>";
-    const svgBridge = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='500' viewBox='0 0 800 500'><rect width='800' height='500' fill='%230f172a'/><rect y='350' width='800' height='150' fill='%230369a1'/><path d='M100 350 Q 400 150 700 350 L 700 380 Q 400 220 100 380 Z' fill='%23475569'/><path d='M 250 350 A 150 150 0 0 1 550 350' fill='%230369a1'/></svg>";
-    const svgCave = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='500' viewBox='0 0 800 500'><rect width='800' height='500' fill='%231e293b'/><ellipse cx='280' cy='200' rx='80' ry='120' fill='%23fef08a' opacity='0.9'/><ellipse cx='520' cy='200' rx='80' ry='120' fill='%23fef08a' opacity='0.9'/><path d='M 0 0 L 800 0 L 800 500 L 0 500 Z M 280 80 A 100 140 0 0 0 280 320 A 100 140 0 0 0 280 80 M 520 80 A 100 140 0 0 0 520 320 A 100 140 0 0 0 520 80' fill='%23020617'/></svg>";
-    const svgRocks = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='500' viewBox='0 0 800 500'><rect width='800' height='500' fill='%230c4a6e'/><path d='M 100 500 L 150 180 L 220 500' fill='%239a3412'/><path d='M 250 500 L 320 120 L 400 500' fill='%23c2410c'/><path d='M 450 500 L 520 220 L 600 500' fill='%239a3412'/><path d='M 620 500 L 680 150 L 760 500' fill='%23ea580c'/></svg>";
-    const svgMonastery = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='500' viewBox='0 0 800 500'><rect width='800' height='500' fill='%230f172a'/><rect x='250' y='200' width='300' height='200' fill='%23f8fafc'/><path d='M 230 200 L 400 80 L 570 200 Z' fill='%23991b1b'/><rect x='360' y='280' width='80' height='120' fill='%23451a03'/><path d='M 380 40 L 420 40 M 400 20 L 400 60' stroke='%23fef08a' stroke-width='8'/></svg>";
-
+    // Проверени директни HD снимки, които НЯМА да блокират
     const places = [
       {
         title: "Вазовска Екопътека и водопад Скакля",
         location: "Искърско дефиле • Стара планина",
-        img: svgWaterfall,
+        img: "https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=1000&q=80",
         desc: "Един от най-живописните преходи в района с изумителна гледка към скалите и високия водопад.",
         km: 120
       },
       {
         title: "Седемте Рила Езера",
         location: "Рила планина • Паничище",
-        img: svgLakes,
+        img: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80",
         desc: "Най-известната езерна група в България, разположена в красив циркус в Рила планина.",
         km: 190
       },
       {
         title: "Дяволският мост",
         location: "Родопи • гр. Ардино",
-        img: svgBridge,
+        img: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1000&q=80",
         desc: "Мистичен средновековен мост над река Арда, заобиколен от невероятна родопска природа.",
         km: 520
       },
       {
         title: "Пещера Проходна (Очите на Бога)",
         location: "Карлуково • Луковит",
-        img: svgCave,
+        img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1000&q=80",
         desc: "Известна пещера с два огромни естествени скални отвора, наподобяващи човешки очи.",
         km: 230
       },
       {
         title: "Белоградчишки Скали",
         location: "Белоградчик • Северозападна България",
-        img: svgRocks,
+        img: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1000&q=80",
         desc: "Уникални червеникави скални образувания с богата история и средновековна крепост.",
         km: 430
       },
       {
         title: "Рилски Манастир",
         location: "Рила планина",
-        img: svgMonastery,
+        img: "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&w=1000&q=80",
         desc: "Най-големият и известен православен манастир в България, част от световното наследство на ЮНЕСКО.",
         km: 240
       }
