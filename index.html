@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BG Перли - Безкраен Генератор на Дестинации</title>
+  <title>BG Перли - Генератор на Дестинации</title>
   <style>
     :root {
       --bg: #0f172a;
@@ -140,22 +140,22 @@
   </header>
 
   <div class="container">
-    <button class="generator-btn" id="genBtn" onclick="fetchNewDestination()">🌐 ГЕНЕРИРАЙ СЛЕДВАЩА ИЗНЕНАДА (LIVE API)</button>
+    <button class="generator-btn" onclick="generateRandomPlace()">🎲 ГЕНЕРИРАЙ СЛЕДВАЩА ДЕСТИНАЦИЯ</button>
 
     <div class="card" id="placeCard">
-      <h2 id="placeTitle">Зареждане на дестинация...</h2>
-      <p id="placeLocation" style="color: var(--text-muted);">Автоматично генерирано от база данни</p>
+      <h2 id="placeTitle">Зареждане...</h2>
+      <p id="placeLocation" style="color: var(--text-muted);"></p>
       
       <img id="placeImg" src="" alt="Дестинация" class="destination-img">
       
-      <p id="placeDesc">Натиснете бутона горе, за да изтеглите ново място, снимка и автоматичен маршрут!</p>
+      <p id="placeDesc"></p>
 
       <div class="calculator">
         <h3>🚗 Калкулатор за това пътуване</h3>
         
         <div class="form-group">
           <label>Приблиз. разстояние в двете посоки (км):</label>
-          <input type="number" id="distance" value="150">
+          <input type="number" id="distance" value="120">
         </div>
 
         <div class="form-group">
@@ -181,62 +181,76 @@
   </div>
 
   <script>
-    // Списък с ключови теми за природа, скали, планини и езера
-    const topics = ['mountain', 'waterfall', 'canyon', 'forest', 'lake', 'castle', 'nature'];
-    
-    // Примерни локации за изненадващо генериране
-    const titles = [
-      "Мистично каньонно ждрело",
-      "Планински водопад и панорама",
-      "Езерно плато и природна екопътека",
-      "Вековна крепост в скалите",
-      "Скрита пещера и скални отвори",
-      "Родопска панорамна площадка",
-      "Речен завой и вековна гора"
+    // База данни с реални места и гарантирани снимки
+    const places = [
+      {
+        title: "Вазовска Екопътека и водопад Скакля",
+        location: "Искърско дефиле • Западни Стара планина",
+        img: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80",
+        desc: "Един от най-живописните преходи в района на София с изумителна гледка към скалите и един от най-високите водопади в България.",
+        km: 120
+      },
+      {
+        title: "Седемте Рила Езера",
+        location: "Рила планина • Паничище",
+        img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=80",
+        desc: "Най-известната езерна група в България. Разположени са стъпаловидно в голям циркус в Северозападна Рила.",
+        km: 190
+      },
+      {
+        title: "Дяволският мост",
+        location: "Родопи • гр. Ардино",
+        img: "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=1000&q=80",
+        desc: "Мистичен средновековен мост над река Арда, заобиколен от невероятни родопски пейзажи.",
+        km: 520
+      },
+      {
+        title: "Пещера Проходна (Очите на Бога)",
+        location: "Карлуково • Луковит",
+        img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1000&q=80",
+        desc: "Една от най-известните и естествено осветени пещери у нас, известна с двата скални отвора, наподобяващи очи.",
+        km: 230
+      },
+      {
+        title: "Белоградчишки Скали",
+        location: "Белоградчик • Северозападна България",
+        img: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1000&q=80",
+        desc: "Уникални скални образувания с червеникав цвят, оформяли се в продължение на над 200 милиона години.",
+        km: 430
+      },
+      {
+        title: "Рилски Манастир",
+        location: "Рила планина • Долно Драглище",
+        img: "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&w=1000&q=80",
+        desc: "Най-големият и известен православен манастир в България, част от световното наследство на ЮНЕСКО.",
+        km: 240
+      }
     ];
 
-    async function fetchNewDestination() {
+    let currentIndex = -1;
+
+    function generateRandomPlace() {
+      let newIndex;
+      do {
+        newIndex = Math.floor(Math.random() * places.length);
+      } while (newIndex === currentIndex);
+
+      currentIndex = newIndex;
+      const place = places[currentIndex];
+
       const card = document.getElementById('placeCard');
-      const btn = document.getElementById('genBtn');
-      
-      btn.innerText = "⏳ Зареждане на живо...";
-      card.style.opacity = 0.4;
+      card.style.opacity = 0;
 
-      // Избиране на произволна тема
-      const randomTopic = topics[Math.floor(Math.random() * topics.length)];
-      const randomTitle = titles[Math.floor(Math.random() * titles.length)];
-      
-      // Генериране на ново произволно разстояние (между 80 км и 480 км)
-      const randomKm = Math.floor(Math.random() * (480 - 80 + 1)) + 80;
-
-      // Теглене на снимка в реално време от Unsplash Source API
-      const timestamp = new Date().getTime(); // За да не кешира същата снимка
-      const imgUrl = `https://source.unsplash.com/800x600/?${randomTopic}&sig=${timestamp}`;
-
-      // Обновяване на съдържанието
-      document.getElementById('placeTitle').innerText = randomTitle;
-      document.getElementById('placeLocation').innerText = `Генерирана дестинация • Категория: ${randomTopic.toUpperCase()}`;
-      document.getElementById('placeDesc').innerText = `Открийте невероятната красота на тази дестинация. Подходяща за уикенд разходка и бягство от градския шум.`;
-      
-      // Зареждаме снимката
-      const imgTag = document.getElementById('placeImg');
-      imgTag.src = imgUrl;
-
-      // Обновяваме километрите в калкулатора
-      document.getElementById('distance').value = randomKm;
-
-      imgTag.onload = () => {
-        card.style.opacity = 1;
-        btn.innerText = "🌐 ГЕНЕРИРАЙ СЛЕДВАЩА ИЗНЕНАДА (LIVE API)";
-        calculateFuel();
-      };
-      
-      // За всеки случай, ако снимката забави:
       setTimeout(() => {
-        card.style.opacity = 1;
-        btn.innerText = "🌐 ГЕНЕРИРАЙ СЛЕДВАЩА ИЗНЕНАДА (LIVE API)";
+        document.getElementById('placeTitle').innerText = place.title;
+        document.getElementById('placeLocation').innerText = place.location;
+        document.getElementById('placeImg').src = place.img;
+        document.getElementById('placeDesc').innerText = place.desc;
+        document.getElementById('distance').value = place.km;
+
         calculateFuel();
-      }, 1000);
+        card.style.opacity = 1;
+      }, 200);
     }
 
     const distanceInput = document.getElementById('distance');
@@ -263,8 +277,8 @@
     priceInput.addEventListener('input', calculateFuel);
     peopleInput.addEventListener('input', calculateFuel);
 
-    // Зареждаме първоначална дестинация при отваряне
-    fetchNewDestination();
+    // Зареждане при отваряне
+    generateRandomPlace();
   </script>
 </body>
 </html>
