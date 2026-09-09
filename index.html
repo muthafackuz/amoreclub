@@ -87,6 +87,7 @@
       border-radius: 8px;
       margin-top: 1rem;
       background-color: #020617;
+      display: block;
     }
     .calculator {
       background: #020617;
@@ -181,49 +182,41 @@
   </div>
 
   <script>
-    // База данни с реални места и гарантирани снимки
     const places = [
       {
         title: "Вазовска Екопътека и водопад Скакля",
-        location: "Искърско дефиле • Западни Стара планина",
-        img: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1000&q=80",
-        desc: "Един от най-живописните преходи в района на София с изумителна гледка към скалите и един от най-високите водопади в България.",
+        location: "Искърско дефиле • Стара планина",
+        img: "https://picsum.photos/id/1015/800/500",
+        desc: "Един от най-живописните преходи в района с изумителна гледка към скалите и водопада.",
         km: 120
       },
       {
         title: "Седемте Рила Езера",
         location: "Рила планина • Паничище",
-        img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=80",
-        desc: "Най-известната езерна група в България. Разположени са стъпаловидно в голям циркус в Северозападна Рила.",
+        img: "https://picsum.photos/id/1018/800/500",
+        desc: "Най-известната езерна група в България, разположена в красив планински циркус.",
         km: 190
       },
       {
         title: "Дяволският мост",
         location: "Родопи • гр. Ардино",
-        img: "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=1000&q=80",
-        desc: "Мистичен средновековен мост над река Арда, заобиколен от невероятни родопски пейзажи.",
+        img: "https://picsum.photos/id/1028/800/500",
+        desc: "Мистичен средновековен мост над река Арда, заобиколен от невероятна природа.",
         km: 520
       },
       {
         title: "Пещера Проходна (Очите на Бога)",
         location: "Карлуково • Луковит",
-        img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1000&q=80",
-        desc: "Една от най-известните и естествено осветени пещери у нас, известна с двата скални отвора, наподобяващи очи.",
+        img: "https://picsum.photos/id/1036/800/500",
+        desc: "Известна пещера с два огромни естествени скални отвора, наподобяващи човешки очи.",
         km: 230
       },
       {
         title: "Белоградчишки Скали",
         location: "Белоградчик • Северозападна България",
-        img: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1000&q=80",
-        desc: "Уникални скални образувания с червеникав цвят, оформяли се в продължение на над 200 милиона години.",
+        img: "https://picsum.photos/id/1043/800/500",
+        desc: "Уникални червеникави скални образувания с богата история и средновековна крепост.",
         km: 430
-      },
-      {
-        title: "Рилски Манастир",
-        location: "Рила планина • Долно Драглище",
-        img: "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&w=1000&q=80",
-        desc: "Най-големият и известен православен манастир в България, част от световното наследство на ЮНЕСКО.",
-        km: 240
       }
     ];
 
@@ -238,19 +231,13 @@
       currentIndex = newIndex;
       const place = places[currentIndex];
 
-      const card = document.getElementById('placeCard');
-      card.style.opacity = 0;
+      document.getElementById('placeTitle').innerText = place.title;
+      document.getElementById('placeLocation').innerText = place.location;
+      document.getElementById('placeImg').src = place.img;
+      document.getElementById('placeDesc').innerText = place.desc;
+      document.getElementById('distance').value = place.km;
 
-      setTimeout(() => {
-        document.getElementById('placeTitle').innerText = place.title;
-        document.getElementById('placeLocation').innerText = place.location;
-        document.getElementById('placeImg').src = place.img;
-        document.getElementById('placeDesc').innerText = place.desc;
-        document.getElementById('distance').value = place.km;
-
-        calculateFuel();
-        card.style.opacity = 1;
-      }, 200);
+      calculateFuel();
     }
 
     const distanceInput = document.getElementById('distance');
@@ -277,7 +264,6 @@
     priceInput.addEventListener('input', calculateFuel);
     peopleInput.addEventListener('input', calculateFuel);
 
-    // Зареждане при отваряне
     generateRandomPlace();
   </script>
 </body>
