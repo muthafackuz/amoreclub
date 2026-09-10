@@ -1,6 +1,7 @@
 backend:
   name: git-gateway
-  branch: main # или master (името на главния ви клон в GitHub)
+  branch: main
+  site_domain: amoreclub.netlify.app # Указва къде се намира Identity услугата
 
 # Къде ще се качват изображенията от статиите
 media_folder: "images/destinations"
