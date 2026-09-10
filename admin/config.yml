@@ -1,0 +1,22 @@
+backend:
+  name: git-gateway
+  branch: main # или master (името на главния ви клон в GitHub)
+
+# Къде ще се качват изображенията от статиите
+media_folder: "images/destinations"
+public_folder: "/images/destinations"
+
+# Дефиниране на колекцията от дестинации
+collections:
+  - name: "destinations"
+    label: "Дестинации"
+    folder: "destinations" # В тази папка ще се записват новите статии
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Заглавие", name: "title", widget: "string" }
+      - { label: "Дата на публикуване", name: "date", widget: "datetime" }
+      - { label: "Главна снимка", name: "thumbnail", widget: "image" }
+      - { label: "Кратко описание", name: "description", widget: "text" }
+      - { label: "Местоположение / Област", name: "location", widget: "string" }
+      - { label: "Пълно съдържание", name: "body", widget: "markdown" }
